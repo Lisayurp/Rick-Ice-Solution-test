@@ -1,20 +1,26 @@
 # Rick Ice Solutions — the real website
 
-Shop + database + admin panel. Node and SQLite, no other services needed.
+Shop + database + admin panel. Node, Express and Postgres, built to run on Vercel
+(product/barcode photos live in Vercel Blob storage).
 
 ---
 
 ## 1. Install
 
-You need Node 18 or newer (https://nodejs.org — take the LTS download).
+You need Node 18 or newer (https://nodejs.org — take the LTS download), and a
+Postgres database + Blob store from the Vercel dashboard (**Storage → Create
+Database**, once for Postgres and once for Blob). Connecting them to your
+Vercel project fills in `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` for you in
+production — for local development, copy those same values into your `.env`.
 
 ```bash
-cd server
+cd rickice-app
 npm install
-cp .env.example .env        # Windows:  copy .env.example .env
+cp env.example.txt .env        # Windows:  copy env.example.txt .env
 ```
 
-Open `.env` and set at least `ADMIN_EMAIL`, `ADMIN_PASSWORD` and `SESSION_SECRET`.
+Open `.env` and set at least `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`,
+`POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`.
 
 ## 2. Fill the database
 
@@ -86,33 +92,40 @@ Payment is cash / bank transfer / pay in store for now. The order records the
 chosen method and the status flow covers the rest. Adding Stripe later is a
 small job: one route, one key.
 
-## Putting it online
+## Putting it online (Vercel)
 
-Recommended: **Render** (<https://render.com>) — free tier, connects to GitHub,
-no server admin.
+1. Push this `rickice-app` folder to a GitHub repository.
+2. On [vercel.com](https://vercel.com): **New Project**, pick the repo.
+3. Before the first deploy, go to the project's **Storage** tab and create a
+   **Postgres** database and a **Blob** store, connecting both to this
+   project — Vercel sets `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN`
+   automatically.
+4. Under **Settings → Environment Variables**, add the rest of your `.env`
+   values (`SESSION_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SHOP_EMAIL`,
+   `SHOP_WHATSAPP`, `SMTP_*`, `MAIL_FROM`).
+5. Deploy. Vercel detects `api/index.js` automatically — no build step needed.
+6. Run `npm run seed` **once from your own machine**, pointed at the same
+   `POSTGRES_URL` as production (in your local `.env`), to create the admin
+   login and load starting products/categories/wording.
 
-1. Push this `server` folder to a GitHub repository.
-2. On Render: **New → Web Service**, pick the repo.
-3. Build command `npm install`, start command `npm start`.
-4. Add the `.env` values under **Environment**.
-5. Add a **Disk** mounted at `/opt/render/project/src/data` so the database and
-   uploaded photos survive restarts.
-
-Railway and Fly.io work the same way. Once it's live, point your domain at it.
+Point your domain at the Vercel project whenever you're ready (**Settings →
+Domains**).
 
 ## Backups
 
-Everything lives in `data/rickice.db`. Copy that file somewhere safe now and
-then — that is your whole shop. Uploaded photos are in `public/images/uploads/`.
+Everything lives in your Postgres database (Vercel dashboard → Storage → your
+database → Backups) — that's your whole shop. Uploaded photos live separately
+in Vercel Blob storage.
 
 ## Files
 
 ```
-server.js              the whole API and the site
-db.js                  database tables
-mailer.js              email + WhatsApp link
-seed.js                loads the rickice-*.js files into the database
-public/                the shop itself
-public/admin.html      the admin panel
-data/rickice.db        your database (created on first run)
+server.js              the whole API and the site (exports the Express app)
+api/index.js            the Vercel serverless function entry point
+vercel.json              routes static files + /api/* on Vercel
+db.js                   database schema + query helpers (Postgres)
+mailer.js               email + WhatsApp link
+seed.js                 loads the rickice-*.js files into the database
+public/                 the shop itself (served as static files on Vercel)
+public/admin.html       the admin panel
 ```

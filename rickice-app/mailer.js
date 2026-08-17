@@ -1,6 +1,6 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const { db } = require('./db');
+const { sql } = require('./db');
 
 const host = process.env.SMTP_HOST;
 const transport = host
@@ -16,7 +16,8 @@ const transport = host
    Never throws — a mail problem must not lose an order. */
 async function send(to, subject, body) {
   if (!to) return;
-  const row = db.prepare('INSERT INTO mail_log (to_addr, subject, body) VALUES (?,?,?)').run(to, subject, body);
+  const { rows } = await sql`INSERT INTO mail_log (to_addr, subject, body) VALUES (${to}, ${subject}, ${body}) RETURNING id`;
+  const logId = rows[0].id;
   if (!transport) {
     console.log('\n--- EMAIL (not sent, no SMTP configured) ---');
     console.log('To:', to, '\nSubject:', subject, '\n' + body + '\n');
@@ -29,9 +30,9 @@ async function send(to, subject, body) {
       text: body,
       html: '<pre style="font:14px/1.6 system-ui">' + body.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])) + '</pre>'
     });
-    db.prepare('UPDATE mail_log SET sent = 1 WHERE id = ?').run(row.lastInsertRowid);
+    await sql`UPDATE mail_log SET sent = 1 WHERE id = ${logId}`;
   } catch (err) {
-    db.prepare('UPDATE mail_log SET error = ? WHERE id = ?').run(String(err.message || err), row.lastInsertRowid);
+    await sql`UPDATE mail_log SET error = ${String(err.message || err)} WHERE id = ${logId}`;
     console.error('Email failed:', err.message);
   }
 }
