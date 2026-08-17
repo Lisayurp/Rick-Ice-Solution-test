@@ -1,0 +1,28 @@
+RICK ICE SOLUTIONS — how to start
+=================================
+
+1. Install Node 18+ from https://nodejs.org (take the LTS button).
+
+2. Open this folder in VS Code, then open a terminal (Terminal > New Terminal)
+   and run:
+
+       npm install
+
+3. Rename  env.example.txt  to  .env
+   Open it and set ADMIN_EMAIL, ADMIN_PASSWORD and SESSION_SECRET.
+   (Rename gitignore.txt to .gitignore too if you're using GitHub.)
+
+4. Load the products and page text into the database:
+
+       npm run seed
+
+5. Start it:
+
+       npm start
+
+   Shop   ->  http://localhost:3000
+   Admin  ->  http://localhost:3000/admin
+
+Log into the admin with the ADMIN_EMAIL and ADMIN_PASSWORD you set in step 3.
+
+Full details, hosting and backups: README.md

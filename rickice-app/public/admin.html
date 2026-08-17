@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rick Ice — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#003B46; --cream:#F5F2E9; --gold:#A67C52; --line:rgba(0,59,70,.14); color-scheme: light; }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--cream); color:var(--ink); font:15px/1.6 Helvetica,Arial,sans-serif }
+  header { background:var(--ink); color:var(--cream); padding:16px 28px; display:flex; align-items:center; gap:20px; position:sticky; top:0; z-index:5 }
+  header h1 { font-family:'Playfair Display',Georgia,serif; font-size:22px; margin:0; font-weight:600 }
+  header .who { margin-left:auto; font-size:13px; opacity:.8 }
+  nav { display:flex; gap:6px; padding:14px 28px 0; flex-wrap:wrap }
+  nav button { padding:9px 16px; border:1px solid var(--line); background:#fff; border-radius:999px; font:inherit; font-size:13px; cursor:pointer }
+  nav button.on { background:var(--ink); color:var(--cream); border-color:var(--ink) }
+  main { padding:22px 28px 60px; max-width:1180px }
+  section { display:none } section.on { display:block }
+  h2 { font-family:'Playfair Display',Georgia,serif; font-weight:600; font-size:24px; margin:14px 0 16px }
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden }
+  th, td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); font-size:14px; vertical-align:top }
+  th { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(0,59,70,.6); background:#faf8f3 }
+  tr:last-child td { border-bottom:0 }
+  input, select, textarea { font:inherit; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); width:100% }
+  label { display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(0,59,70,.6); margin-bottom:5px }
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:14px }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:22px; margin-bottom:22px }
+  button.go { background:var(--gold); color:var(--cream); border:0; padding:12px 22px; border-radius:999px; font:inherit; font-size:12px; letter-spacing:.12em; text-transform:uppercase; cursor:pointer }
+  button.mini { padding:6px 12px; font-size:12px; border:1px solid var(--line); background:#fff; border-radius:999px; cursor:pointer }
+  .pill { display:inline-block; padding:3px 11px; border-radius:999px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; background:rgba(0,59,70,.08) }
+  .pill.Pending { background:#F0D9C0 } .pill.Confirmed { background:#66A5AD; color:#fff }
+  .pill.Completed { background:rgba(0,59,70,.1) } .pill.Cancelled { background:#e6d6d6 }
+  .login { max-width:380px; margin:14vh auto; background:#fff; border:1px solid var(--line); border-radius:12px; padding:30px }
+  .muted { color:rgba(0,59,70,.55); font-size:13px }
+  .err { color:#A67C52; font-size:13px; min-height:20px }
+  img.thumb { width:44px; height:44px; object-fit:cover; border-radius:6px; background:#eee }
+</style>
+</head>
+<body>
+
+<div id="login" class="login" hidden>
+  <h2 style="margin-top:0">Staff sign in</h2>
+  <form id="loginForm" style="display:grid;gap:12px" onsubmit="return doLogin(event)">
+    <div><label>Email</label><input id="lEmail" type="email" autocomplete="username" required></div>
+    <div><label>Password</label><input id="lPass" type="password" autocomplete="current-password" required></div>
+    <button class="go" type="submit">Sign in</button>
+    <div class="err" id="lErr"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+<header>
+  <h1>Rick Ice — Admin</h1>
+  <span class="pill" id="alerts"></span>
+  <span class="who" id="who"></span>
+  <button class="mini" onclick="logout()">Sign out</button>
+</header>
+
+<nav>
+  <button data-tab="orders" class="on">Orders</button>
+  <button data-tab="products">Products</button>
+  <button data-tab="categories">Categories</button>
+  <button data-tab="bookings">Workshop</button>
+  <button data-tab="reviews">Reviews</button>
+  <button data-tab="content">Page text</button>
+  <button data-tab="staff">Staff &amp; customers</button>
+</nav>
+
+<main>
+  <section id="orders" class="on">
+    <h2>Orders</h2>
+    <table><thead><tr><th>Ref</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead>
+    <tbody id="ordersBody"></tbody></table>
+  </section>
+
+  <section id="products">
+    <h2>Products</h2>
+    <div class="card">
+      <div class="row">
+        <div><label>ID (unique)</label><input id="pSlot" placeholder="b09" oninput="autoSlot=false"></div>
+        <div><label>Department</label><select id="pDept" onchange="onDeptChange()"><option value="boutique">Boutique</option><option value="automotive">Automotive</option><option value="fireworks">Fireworks</option></select></div>
+        <div><label>Name</label><input id="pName"></div>
+        <div><label>Category</label><input id="pCat" list="catList"><datalist id="catList"></datalist></div>
+      </div>
+      <div class="row">
+        <div><label>Price (EC$)</label><input id="pPrice" type="number" step="1"></div>
+        <div><label>Was (blank if none)</label><input id="pWas" type="number" step="1"></div>
+        <div><label>Badge</label><select id="pBadge"><option value="">None</option><option>New</option><option>Sale</option></select></div>
+        <div><label>Stock</label><input id="pStock" type="number" value="10"></div>
+      </div>
+      <div class="row" style="grid-template-columns:2fr 1fr 1fr">
+        <div><label>Description</label><input id="pBlurb"></div>
+        <div><label>Colours (comma separated hex)</label><input id="pCol" placeholder="#F5F2E9,#003B46"></div>
+        <div><label>Photo</label><input id="pPhoto" type="file" accept="image/*"></div>
+      </div>
+      <div class="row" style="grid-template-columns:1fr 1fr">
+        <div id="pVendorBarcodeField">
+          <label>Vendor barcode photo</label>
+          <input id="pVendorBarcode" type="file" accept="image/*">
+          <div class="muted" id="pVendorBarcodeCurrent" style="margin-top:6px"></div>
+        </div>
+        <div>
+          <label>Generated barcode (auto, scannable)</label>
+          <div id="pBarcodePreview" style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;min-height:70px;display:flex;align-items:center;justify-content:center">
+            <span class="muted">Generated when you save</span>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="pPhotoPath">
+      <input type="hidden" id="pVendorBarcodePath">
+      <button class="mini" type="button" onclick="newProduct()">+ New item</button>
+      <button class="go" onclick="saveProduct()">Save product</button>
+      <span class="err" id="pErr"></span>
+    </div>
+    <table><thead><tr><th></th><th>ID</th><th>Name</th><th>Dept</th><th>Category</th><th>Price</th><th>Stock</th><th>Barcode</th><th></th></tr></thead>
+    <tbody id="prodBody"></tbody></table>
+  </section>
+
+  <section id="categories">
+    <h2>Categories</h2>
+    <div class="card">
+      <input type="hidden" id="cEditId">
+      <div class="row" style="grid-template-columns:1fr 1fr 1fr auto">
+        <div><label>Department</label><select id="cDept"><option value="boutique">Boutique</option><option value="automotive">Automotive</option><option value="fireworks">Fireworks</option></select></div>
+        <div><label>Name</label><input id="cName"></div>
+        <div><label>Photo</label><input id="cPhoto" type="file" accept="image/*"><div class="muted" id="cPhotoNote"></div></div>
+        <div style="align-self:end;display:flex;gap:8px">
+          <button class="go" id="cSubmitBtn" onclick="saveCategory()">Add</button>
+          <button class="mini" type="button" id="cCancelBtn" onclick="cancelEditCat()" hidden>Cancel</button>
+        </div>
+      </div>
+      <span class="err" id="catErr"></span>
+    </div>
+    <table><thead><tr><th></th><th>Department</th><th>Name</th><th></th></tr></thead><tbody id="catBody"></tbody></table>
+  </section>
+
+  <section id="bookings">
+    <h2>Workshop requests</h2>
+    <table><thead><tr><th>When</th><th>Service</th><th>Item</th><th>Contact</th><th>Notes</th><th>Status</th><th></th></tr></thead>
+    <tbody id="bookBody"></tbody></table>
+  </section>
+
+  <section id="reviews">
+    <h2>Reviews</h2>
+    <table><thead><tr><th>When</th><th>Name</th><th>Product</th><th>Rating</th><th>Review</th><th></th></tr></thead>
+    <tbody id="revBody"></tbody></table>
+  </section>
+
+  <section id="content">
+    <h2>Page text</h2>
+    <p class="muted">Pick a section, edit the wording, save. This replaces editing the rickice-*.js files by hand.</p>
+    <div class="card">
+      <div style="display:flex;gap:12px;align-items:end;margin-bottom:14px">
+        <div style="width:260px"><label>Section</label><select id="secPick" onchange="loadSection()"></select></div>
+        <button class="go" onclick="saveSection()">Save section</button>
+        <span class="err" id="cErr"></span>
+      </div>
+      <div class="card" style="background:#faf8f3;padding:14px 16px;margin-bottom:14px">
+        <label>Upload a photo — pick which field it fills, then Upload drops the path in for you</label>
+        <div style="display:flex;gap:12px;align-items:end">
+          <div style="flex:1.4"><select id="secPhotoTarget"></select></div>
+          <div style="flex:1"><input id="secPhotoFile" type="file" accept="image/*"></div>
+          <button class="mini" type="button" onclick="uploadSectionPhoto()">Upload</button>
+          <span class="err" id="secPhotoErr"></span>
+        </div>
+        <div style="margin-top:10px"><input id="secPhotoPath" readonly placeholder="Uploaded path also appears here — click to copy" onclick="this.select()"></div>
+      </div>
+      <textarea id="secJson" rows="22" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px"></textarea>
+    </div>
+  </section>
+
+  <section id="staff">
+    <h2>Staff</h2>
+    <div class="card">
+      <input type="hidden" id="sEditId">
+      <div class="row" style="grid-template-columns:repeat(4,1fr) auto">
+        <div><label>Name</label><input id="sName"></div>
+        <div><label>Email</label><input id="sEmail"></div>
+        <div><label id="sPassLabel">Password</label><input id="sPass" type="password"></div>
+        <div><label>Role</label><select id="sRole"><option value="customer">Customer</option><option value="staff">Staff</option><option value="admin">Admin</option></select></div>
+        <div style="align-self:end;display:flex;gap:8px">
+          <button class="go" id="sSubmitBtn" onclick="addStaff()">Add</button>
+          <button class="mini" type="button" id="sCancelBtn" onclick="cancelEditUser()" hidden>Cancel</button>
+        </div>
+      </div>
+      <span class="err" id="sErr"></span>
+    </div>
+    <h2>Everyone</h2>
+    <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th><th></th></tr></thead><tbody id="userBody"></tbody></table>
+  </section>
+</main>
+</div>
+
+<script src="barcode.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const money = n => 'EC$' + Math.round(Number(n) || 0).toLocaleString('en-US');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+let DATA = {};
+
+async function api(url, opts) {
+  const r = await fetch(url, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts));
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.error || r.statusText);
+  return body;
+}
+
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('main section').forEach(s => s.classList.toggle('on', s.id === b.dataset.tab));
+});
+
+async function boot() {
+  const { user } = await api('/api/auth/me');
+  if (!user || (user.role !== 'admin' && user.role !== 'staff')) { $('login').hidden = false; return; }
+  $('login').hidden = true; $('app').hidden = false;
+  $('who').textContent = user.name + ' · ' + user.role;
+  await refresh();
+}
+
+async function doLogin(e) {
+  if (e) e.preventDefault();
+  try {
+    await api('/api/auth/login', { method:'POST', body: JSON.stringify({ email: $('lEmail').value, password: $('lPass').value }) });
+    location.reload();
+  } catch (e) { $('lErr').textContent = e.message; }
+  return false;
+}
+async function logout() { await api('/api/auth/logout', { method:'POST' }); location.reload(); }
+
+async function refresh() {
+  DATA = await api('/api/admin/summary');
+  $('alerts').textContent = DATA.counts.pending + ' pending · ' + DATA.counts.lowStock + ' low stock';
+  drawOrders(); drawProducts(); drawCats(); drawBookings(); drawReviews(); drawUsers(); drawSections();
+}
+
+function drawOrders() {
+  $('ordersBody').innerHTML = DATA.orders.map(o => `<tr>
+    <td><b>${esc(o.ref)}</b><div class="muted">${esc(o.created_at)}</div></td>
+    <td>${esc(o.name)}<div class="muted">${esc(o.phone)}<br>${esc(o.email)}</div>
+        <div class="muted">${esc(o.mode)} · ${esc(o.pay)}</div></td>
+    <td>${o.items.map(i => esc(i.qty + ' x ' + i.name) + (i.fitting ? ' <span class="muted">(fitting)</span>' : '')).join('<br>')}
+        <div class="muted">${esc(o.address)}</div></td>
+    <td>${money(o.total)}</td>
+    <td><span class="pill ${esc(o.status)}">${esc(o.status)}</span></td>
+    <td><select onchange="setOrder(${o.id}, this.value)">
+      ${['Pending','Confirmed','Ready','Completed','Cancelled'].map(s => `<option ${s===o.status?'selected':''}>${s}</option>`).join('')}
+    </select></td></tr>`).join('') || '<tr><td colspan="6" class="muted">No orders yet.</td></tr>';
+}
+async function setOrder(id, status) {
+  const r = await api('/api/admin/orders/' + id, { method:'PUT', body: JSON.stringify({ status }) });
+  if (r.whatsapp && confirm('Emailed the customer. Also open WhatsApp to message them?')) window.open(r.whatsapp, '_blank');
+  refresh();
+}
+
+function drawProducts() {
+  refreshCatList($('pDept') ? $('pDept').value : 'boutique');
+  $('prodBody').innerHTML = DATA.products.filter(p => p.active).map(p => `<tr>
+    <td>${p.photo ? `<img class="thumb" src="${esc(p.photo)}">` : ''}</td>
+    <td>${esc(p.slot_id)}</td><td>${esc(p.name)}</td><td>${esc(p.dept)}</td><td>${esc(p.category)}</td>
+    <td>${money(p.price)}</td>
+    <td><input type="number" value="${p.stock}" style="width:80px" onchange="setStock('${esc(p.slot_id)}', this.value)"></td>
+    <td>${p.barcode ? `<div style="font-size:11px">${esc(p.barcode)}</div><button class="mini" onclick="printBarcode('${esc(p.slot_id)}')">Print label</button>` : '<span class="muted">—</span>'}</td>
+    <td><button class="mini" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+        <button class="mini" onclick="delProduct('${esc(p.slot_id)}')">Remove</button></td></tr>`).join('');
+}
+function toggleVendorBarcodeField(dept) {
+  $('pVendorBarcodeField').style.display = dept === 'fireworks' ? 'none' : '';
+}
+function showBarcodePreview(barcode) {
+  $('pBarcodePreview').innerHTML = barcode
+    ? UPC.renderSVG(barcode, { moduleWidth: 1.6, height: 55 })
+    : '<span class="muted">Generated when you save</span>';
+}
+function printBarcode(slot) {
+  const p = DATA.products.find(x => x.slot_id === slot);
+  if (!p || !p.barcode) return;
+  const svg = UPC.renderSVG(p.barcode, { moduleWidth: 2.2, height: 60 });
+  const w = window.open('', '_blank', 'width=380,height=260');
+  w.document.write(`<!doctype html><html><head><title>${esc(p.name)} — label</title>
+<style>body{font-family:Helvetica,Arial,sans-serif;text-align:center;padding:16px}
+h3{margin:0 0 4px;font-size:14px}p{margin:0 0 10px;font-size:12px;color:#555}</style></head>
+<body><h3>${esc(p.name)}</h3><p>${money(p.price)} · ${esc(p.slot_id)}</p>${svg}
+<script>window.onload = () => setTimeout(() => window.print(), 200)<\/script></body></html>`);
+  w.document.close();
+}
+function refreshCatList(dept) {
+  $('catList').innerHTML = [...new Set(DATA.categories.filter(c => c.dept === dept).map(c => c.name))]
+    .map(n => `<option value="${esc(n)}">`).join('');
+}
+function editProduct(p) {
+  autoSlot = false;
+  $('pSlot').value = p.slot_id; $('pDept').value = p.dept; $('pName').value = p.name;
+  $('pCat').value = p.category; $('pPrice').value = p.price; $('pWas').value = p.was || '';
+  $('pBadge').value = p.badge || ''; $('pStock').value = p.stock; $('pBlurb').value = p.blurb || '';
+  $('pCol').value = (JSON.parse(p.colours || '[]')).join(','); $('pPhotoPath').value = p.photo || '';
+  $('pVendorBarcodePath').value = p.vendor_barcode_photo || '';
+  $('pVendorBarcodeCurrent').innerHTML = p.vendor_barcode_photo ? `<img class="thumb" src="${esc(p.vendor_barcode_photo)}"> on file` : 'No vendor barcode uploaded yet';
+  toggleVendorBarcodeField(p.dept);
+  showBarcodePreview(p.barcode || '');
+  refreshCatList(p.dept);
+  window.scrollTo(0, 0);
+}
+
+let autoSlot = false;
+const DEPT_PREFIX = { boutique: 'b', automotive: 'a', fireworks: 'f' };
+function nextSlotId(dept) {
+  const prefix = DEPT_PREFIX[dept] || 'x';
+  const used = (DATA.products || [])
+    .filter(p => p.dept === dept)
+    .map(p => { const m = String(p.slot_id).match(new RegExp('^' + prefix + '(\\d+)$')); return m ? parseInt(m[1], 10) : 0; });
+  const next = (used.length ? Math.max(...used) : 0) + 1;
+  return prefix + String(next).padStart(2, '0');
+}
+// Changing Department always starts a clean slate for that department — every
+// field resets (not just the ID). This stops a stale Name/Category left over
+// from editing one product from silently riding along onto a different
+// department's item and, worse, onto a different product entirely if the ID
+// field still held another item's slot_id (upsert-by-slot_id would then
+// overwrite that unrelated product on Save).
+function onDeptChange() {
+  newProduct();
+}
+function newProduct() {
+  const dept = $('pDept').value;
+  ['pSlot','pName','pCat','pPrice','pWas','pBlurb','pCol','pPhotoPath','pVendorBarcodePath'].forEach(i => $(i).value = '');
+  $('pBadge').value = ''; $('pStock').value = 10;
+  $('pVendorBarcodeCurrent').textContent = '';
+  toggleVendorBarcodeField(dept);
+  showBarcodePreview('');
+  autoSlot = true;
+  $('pSlot').value = nextSlotId(dept);
+  refreshCatList(dept);
+  $('pErr').textContent = '';
+  window.scrollTo(0, 0);
+  $('pName').focus();
+}
+async function uploadIfAny(input) {
+  if (!input.files || !input.files[0]) return '';
+  const fd = new FormData(); fd.append('photo', input.files[0]);
+  const r = await fetch('/api/admin/upload', { method:'POST', body: fd });
+  const j = await r.json(); input.value = ''; return j.path || '';
+}
+async function saveProduct() {
+  try {
+    const uploaded = await uploadIfAny($('pPhoto'));
+    const uploadedVendorBarcode = await uploadIfAny($('pVendorBarcode'));
+    const r = await api('/api/admin/products', { method:'POST', body: JSON.stringify({
+      slot_id: $('pSlot').value.trim(), dept: $('pDept').value, name: $('pName').value.trim(),
+      category: $('pCat').value.trim(), price: $('pPrice').value, was: $('pWas').value,
+      badge: $('pBadge').value, stock: $('pStock').value, blurb: $('pBlurb').value,
+      colours: $('pCol').value.split(',').map(s => s.trim()).filter(Boolean),
+      photo: uploaded || $('pPhotoPath').value,
+      vendor_barcode_photo: uploadedVendorBarcode || $('pVendorBarcodePath').value
+    })});
+    showBarcodePreview(r.barcode || '');
+    ['pSlot','pName','pCat','pPrice','pWas','pBlurb','pCol','pPhotoPath','pVendorBarcodePath'].forEach(i => $(i).value = '');
+    $('pVendorBarcodeCurrent').textContent = '';
+    $('pErr').textContent = ''; refresh();
+  } catch (e) { $('pErr').textContent = e.message; }
+}
+async function setStock(slot, stock) {
+  const p = DATA.products.find(x => x.slot_id === slot);
+  await api('/api/admin/products', { method:'POST', body: JSON.stringify(Object.assign({}, p, { colours: JSON.parse(p.colours || '[]'), stock })) });
+  refresh();
+}
+async function delProduct(slot) { if (confirm('Remove ' + slot + ' from the shop?')) { await api('/api/admin/products/' + slot, { method:'DELETE' }); refresh(); } }
+
+function drawCats() {
+  $('catBody').innerHTML = DATA.categories.map((c, i) => {
+    const prevSameDept = i > 0 && DATA.categories[i - 1].dept === c.dept;
+    const nextSameDept = i < DATA.categories.length - 1 && DATA.categories[i + 1].dept === c.dept;
+    return `<tr>
+    <td>${c.photo ? `<img class="thumb" src="${esc(c.photo)}">` : ''}</td>
+    <td>${esc(c.dept)}</td><td>${esc(c.name)}</td>
+    <td>
+        <button class="mini" title="Move up" ${prevSameDept ? '' : 'disabled'} onclick="moveCat(${c.id}, '${esc(c.dept)}', -1)">&uarr;</button>
+        <button class="mini" title="Move down" ${nextSameDept ? '' : 'disabled'} onclick="moveCat(${c.id}, '${esc(c.dept)}', 1)">&darr;</button>
+        <button class="mini" onclick='editCat(${JSON.stringify(c)})'>Edit</button>
+        <button class="mini" onclick="delCat(${c.id})">Remove</button></td></tr>`;
+  }).join('');
+}
+async function moveCat(id, dept, dir) {
+  const ids = DATA.categories.filter(c => c.dept === dept).map(c => c.id);
+  const i = ids.indexOf(id), j = i + dir;
+  if (j < 0 || j >= ids.length) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  try { await api('/api/admin/categories/reorder', { method:'PUT', body: JSON.stringify({ dept, ids }) }); refresh(); }
+  catch (e) { $('catErr').textContent = e.message; }
+}
+function editCat(c) {
+  $('cEditId').value = c.id;
+  $('cDept').value = c.dept;
+  $('cName').value = c.name;
+  $('cPhoto').value = '';
+  $('cPhotoNote').textContent = c.photo ? 'Leave blank to keep the current photo' : '';
+  $('cSubmitBtn').textContent = 'Save';
+  $('cCancelBtn').hidden = false;
+  $('catErr').textContent = '';
+  window.scrollTo(0, 0);
+}
+function cancelEditCat() {
+  $('cEditId').value = '';
+  $('cDept').value = 'boutique';
+  $('cName').value = '';
+  $('cPhoto').value = '';
+  $('cPhotoNote').textContent = '';
+  $('cSubmitBtn').textContent = 'Add';
+  $('cCancelBtn').hidden = true;
+  $('catErr').textContent = '';
+}
+async function saveCategory() {
+  try {
+    if (!$('cName').value.trim()) throw new Error('Give the category a name');
+    const photo = await uploadIfAny($('cPhoto'));
+    const id = $('cEditId').value;
+    const body = JSON.stringify({ dept: $('cDept').value, name: $('cName').value.trim(), photo });
+    if (id) await api('/api/admin/categories/' + id, { method:'PUT', body });
+    else await api('/api/admin/categories', { method:'POST', body });
+    cancelEditCat();
+    refresh();
+  } catch (e) { $('catErr').textContent = e.message; }
+}
+async function delCat(id) {
+  try { await api('/api/admin/categories/' + id, { method:'DELETE' }); refresh(); }
+  catch (e) { $('catErr').textContent = e.message; }
+}
+
+function drawBookings() {
+  $('bookBody').innerHTML = DATA.bookings.map(b => `<tr>
+    <td class="muted">${esc(b.created_at)}</td><td>${esc(b.service)}</td><td>${esc(b.item)}</td>
+    <td>${esc(b.phone)}</td><td>${esc(b.note)}<div class="muted">${esc(b.day)}</div></td>
+    <td><span class="pill">${esc(b.status)}</span></td>
+    <td><select onchange="setBooking(${b.id}, this.value)">
+      ${['Requested','Confirmed','Done','Cancelled'].map(s => `<option ${s===b.status?'selected':''}>${s}</option>`).join('')}
+    </select></td></tr>`).join('') || '<tr><td colspan="7" class="muted">Nothing booked yet.</td></tr>';
+}
+async function setBooking(id, status) {
+  const r = await api('/api/admin/bookings/' + id, { method:'PUT', body: JSON.stringify({ status }) });
+  if (r.whatsapp && confirm('Open WhatsApp to message them too?')) window.open(r.whatsapp, '_blank');
+  refresh();
+}
+
+function drawReviews() {
+  $('revBody').innerHTML = DATA.reviews.map(r => `<tr>
+    <td class="muted">${esc(r.created_at)}</td><td>${esc(r.name)}</td><td>${esc(r.product)}</td>
+    <td>${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</td><td>${esc(r.body)}</td>
+    <td><button class="mini" onclick="setReview(${r.id}, ${r.approved ? 0 : 1})">${r.approved ? 'Hide' : 'Show'}</button>
+        <button class="mini" onclick="delReview(${r.id})">Delete</button></td></tr>`).join('') || '<tr><td colspan="6" class="muted">No reviews yet.</td></tr>';
+}
+async function setReview(id, approved) { await api('/api/admin/reviews/' + id, { method:'PUT', body: JSON.stringify({ approved }) }); refresh(); }
+async function delReview(id) { if (confirm('Delete this review?')) { await api('/api/admin/reviews/' + id, { method:'DELETE' }); refresh(); } }
+
+function drawUsers() {
+  $('userBody').innerHTML = DATA.users.map(u => `<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td>
+    <td>${esc(u.phone)}</td><td><span class="pill">${esc(u.role)}</span></td><td class="muted">${esc(u.created_at)}</td>
+    <td><button class="mini" onclick='editUser(${JSON.stringify(u)})'>Edit</button></td></tr>`).join('');
+}
+function editUser(u) {
+  $('sEditId').value = u.id;
+  $('sName').value = u.name; $('sEmail').value = u.email; $('sRole').value = u.role; $('sPass').value = '';
+  $('sPassLabel').textContent = 'Password (leave blank to keep current)';
+  $('sSubmitBtn').textContent = 'Save changes';
+  $('sCancelBtn').hidden = false;
+  $('sErr').textContent = '';
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function cancelEditUser() {
+  $('sEditId').value = '';
+  ['sName','sEmail','sPass'].forEach(i => $(i).value = '');
+  $('sRole').value = 'staff';
+  $('sPassLabel').textContent = 'Password';
+  $('sSubmitBtn').textContent = 'Add';
+  $('sCancelBtn').hidden = true;
+  $('sErr').textContent = '';
+}
+async function addStaff() {
+  const editId = $('sEditId').value;
+  try {
+    if (editId) {
+      await api('/api/admin/users/' + editId, { method:'PUT', body: JSON.stringify({
+        name: $('sName').value, email: $('sEmail').value, password: $('sPass').value, role: $('sRole').value }) });
+    } else {
+      if (!$('sPass').value) { $('sErr').textContent = 'Password is required'; return; }
+      await api('/api/admin/staff', { method:'POST', body: JSON.stringify({
+        name: $('sName').value, email: $('sEmail').value, password: $('sPass').value, role: $('sRole').value }) });
+    }
+    cancelEditUser();
+    refresh();
+  } catch (e) { $('sErr').textContent = e.message; }
+}
+
+function drawSections() {
+  const keys = Object.keys(DATA.content);
+  $('secPick').innerHTML = keys.map(k => `<option>${esc(k)}</option>`).join('');
+  loadSection();
+}
+function loadSection() {
+  $('secJson').value = JSON.stringify(DATA.content[$('secPick').value] || {}, null, 2);
+  refreshPhotoTargets();
+}
+function findPhotoFields(obj, prefix) {
+  let out = [];
+  if (obj && typeof obj === 'object') {
+    for (const k of Object.keys(obj)) {
+      const v = obj[k];
+      const path = Array.isArray(obj) ? prefix + '[' + k + ']' : (prefix ? prefix + '.' + k : k);
+      if (typeof v === 'string' && /photo/i.test(k)) out.push(path);
+      else if (v && typeof v === 'object') out = out.concat(findPhotoFields(v, path));
+    }
+  }
+  return out;
+}
+function pathGet(obj, path) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
+  let cur = obj;
+  for (const p of parts) cur = cur == null ? undefined : cur[p];
+  return cur;
+}
+function pathSet(obj, path, val) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean);
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
+  cur[parts[parts.length - 1]] = val;
+}
+function refreshPhotoTargets() {
+  let data;
+  try { data = JSON.parse($('secJson').value); } catch (e) { data = {}; }
+  const fields = findPhotoFields(data, '');
+  $('secPhotoTarget').innerHTML = fields.length
+    ? fields.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('')
+    : '<option value="">No photo fields in this section</option>';
+}
+async function uploadSectionPhoto() {
+  $('secPhotoErr').textContent = '';
+  const target = $('secPhotoTarget').value;
+  if (!target) { $('secPhotoErr').textContent = 'No photo field to fill in this section.'; return; }
+  if (!$('secPhotoFile').files || !$('secPhotoFile').files[0]) { $('secPhotoErr').textContent = 'Choose a file first.'; return; }
+  try {
+    const path = await uploadIfAny($('secPhotoFile'));
+    if (!path) { $('secPhotoErr').textContent = 'Upload failed — no path returned.'; return; }
+    $('secPhotoPath').value = path;
+    const data = JSON.parse($('secJson').value);
+    pathSet(data, target, path);
+    $('secJson').value = JSON.stringify(data, null, 2);
+    await api('/api/admin/content/' + $('secPick').value, { method:'PUT', body: JSON.stringify(data) });
+    $('secPhotoErr').textContent = 'Saved ' + target + '.';
+    $('secPhotoPath').select();
+    refresh();
+  } catch (e) {
+    $('secPhotoErr').textContent = e.message || 'Upload failed.';
+  }
+}
+async function saveSection() {
+  try {
+    const body = JSON.parse($('secJson').value);
+    await api('/api/admin/content/' + $('secPick').value, { method:'PUT', body: JSON.stringify(body) });
+    $('cErr').textContent = 'Saved.'; refresh();
+  } catch (e) { $('cErr').textContent = e.message; }
+}
+
+boot();
+</script>
+</body>
+</html>
