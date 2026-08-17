@@ -10,7 +10,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "seed": "node seed.js",
-    "reset": "node seed.js --reset"
+    "reset": "node seed.js --reset",
+    "migrate-legacy": "node migrate-legacy.js"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
@@ -22,5 +23,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^9.0.5",
     "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^13.0.3"
   }
 }
