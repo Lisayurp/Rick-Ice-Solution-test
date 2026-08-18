@@ -24,25 +24,17 @@ img{max-width:100%}
 }
 .ris-mobile-panel a{display:block;padding:13px 0;border-bottom:1px solid rgba(245,242,233,.14);font-size:14px}
 
-/* ---- Fixed grids collapse on narrower screens (product/category/promo grids, two-up panels) ---- */
+/* ---- Fixed grids collapse on narrower screens (product/category/promo grids, two-up panels) ----
+   Real classes, not [style*="..."] attribute matching: the page's template
+   engine re-serializes inline styles (adds spaces, hex -> rgb()) so a literal
+   substring match against the authored style string never matches the
+   rendered DOM. Classes survive that untouched. ---- */
 @media (max-width:900px){
-  [style*="grid-template-columns:repeat(4,1fr)"],
-  [style*="grid-template-columns:repeat(5,1fr)"]{grid-template-columns:repeat(3,1fr)!important}
+  .ris-g45{grid-template-columns:repeat(3,1fr)!important}
 }
 @media (max-width:640px){
-  [style*="grid-template-columns:repeat(3,1fr)"],
-  [style*="grid-template-columns:repeat(4,1fr)"],
-  [style*="grid-template-columns:repeat(5,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
-  [style*="grid-template-columns:1fr 1fr"],
-  [style*="grid-template-columns:1fr 1.2fr"],
-  [style*="grid-template-columns:1fr 1.05fr"],
-  [style*="grid-template-columns:1.4fr 1fr"],
-  [style*="grid-template-columns:1.6fr 1fr 1fr 1fr"],
-  [style*="grid-template-columns:200px 1fr"],
-  [style*="grid-template-columns:minmax(240px,340px) 1fr"],
-  [style*="grid-template-columns:1fr 340px"],
-  [style*="grid-template-columns:1fr 380px"],
-  [style*="grid-template-columns:96px 1fr auto auto"]{grid-template-columns:1fr!important;gap:20px!important}
+  .ris-g45,.ris-g3{grid-template-columns:repeat(2,1fr)!important}
+  .ris-g2col{grid-template-columns:1fr!important;gap:20px!important}
 }
 
 /* ---- Homepage hero: stack instead of diagonal-split overlay on narrow screens ---- */
@@ -55,7 +47,7 @@ img{max-width:100%}
   .ris-hero-copy-row{position:relative!important;height:auto!important}
   .ris-hero-copy{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto!important;max-width:none!important;text-align:left!important;padding:28px 20px 34px!important}
   .ris-hero-copy p,.ris-hero-copy div{margin-left:0!important;text-align:left!important}
-  .ris-hero-copy [style*="justify-content:flex-end"]{justify-content:flex-start!important}
+  .ris-hero-eyebrow-row{justify-content:flex-start!important}
 }
 
 /* ---- Fixed-height diagonal hero banners (Fireworks/other dept, Services,
@@ -64,10 +56,7 @@ img{max-width:100%}
    wrapped text was getting clipped off. Give these room to breathe on
    small screens instead. ---- */
 @media (max-width:640px){
-  [style*="overflow:hidden;height:320px"],
-  [style*="overflow:hidden;height:330px"],
-  [style*="overflow:hidden;height:340px"],
-  [style*="overflow:hidden;height:190px"]{height:auto!important;min-height:260px!important;padding-bottom:24px!important}
+  .ris-hero-fixed{height:auto!important;min-height:260px!important;padding-bottom:24px!important}
 }
 </style><script src="./rickice-chrome.js"></script><script src="./rickice-home.js"></script><script src="./rickice-services.js"></script><script src="./rickice-reviews.js"></script><script src="./rickice-contact.js"></script><script src="./rickice-about.js"></script><script src="./rickice-boutique.js"></script><script src="./rickice-automotive.js"></script><script src="./rickice-fireworks.js"></script><script src="./rickice-content.js"></script><script src="./image-slot.js"></script></helmet>
 
@@ -163,7 +152,7 @@ img{max-width:100%}
 <a href="#" onClick="{{ goBoutique }}" style="display:inline-flex;align-items:center;gap:12px;margin-top:26px;padding:0 0 8px;border-bottom:1px solid #A67C52;font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:#003B46;pointer-events:auto" style-hover="color:#A67C52">{{ home.bqCta }}</a>
 </div>
 <div class="ris-hero-copy" style="position:absolute;right:0;bottom:8%;width:min(460px,48%);text-align:right">
-<div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C79A6B">{{ home.autoEyebrow }}<span style="width:24px;height:2px;background:#C79A6B"></span></div>
+<div class="ris-hero-eyebrow-row" style="display:flex;align-items:center;justify-content:flex-end;gap:12px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C79A6B">{{ home.autoEyebrow }}<span style="width:24px;height:2px;background:#C79A6B"></span></div>
 <h2 style="font-family:Oswald,Helvetica,sans-serif;font-size:clamp(30px,3.6vw,50px);font-weight:600;line-height:1;text-transform:uppercase;margin:14px 0 0;color:#F5F2E9">{{ home.autoTitle }}</h2>
 <p style="font-size:14px;line-height:1.7;color:rgba(245,242,233,.78);margin:14px 0 0;margin-left:auto;max-width:32ch">{{ home.autoBlurb }}</p>
 <a href="#" onClick="{{ goAutomotive }}" style="display:inline-flex;margin-top:22px;padding:13px 28px;background:#A67C52;color:#F5F2E9;font-family:Oswald,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;pointer-events:auto" style-hover="background:#F5F2E9;color:#12262A">{{ home.autoCta }}</a>
@@ -172,7 +161,7 @@ img{max-width:100%}
 </div>
 </section>
 
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
+<section class="ris-g45" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px">
 <sc-for list="{{ home.trust }}" as="t" hint-placeholder-count="4">
 <div style="border-top:2px solid #A67C52;padding-top:14px">
 <div style="font-family:'Playfair Display',Georgia,serif;font-size:17px;font-weight:600">{{ t.title }}</div>
@@ -188,10 +177,10 @@ img{max-width:100%}
 <p style="font-size:14px;color:rgba(0,59,70,.65);margin:8px 0 0">{{ home.twoSidesBlurb }}</p>
 </div>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:38px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:38px">
 <div>
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD;margin-bottom:14px">{{ home.bqPicksLabel }}</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 <sc-for list="{{ bqPicks }}" as="item" hint-placeholder-count="3">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
@@ -205,7 +194,7 @@ img{max-width:100%}
 </div>
 <div>
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD;margin-bottom:14px">{{ home.autoPicksLabel }}</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 <sc-for list="{{ autoPicks }}" as="item" hint-placeholder-count="3">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
@@ -221,7 +210,7 @@ img{max-width:100%}
 </section>
 
 <section style="background:#003B46;margin-top:64px;padding:56px 0">
-<div style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:44px;align-items:start">
+<div class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:44px;align-items:start">
 <div>
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD">{{ fireworks.eyebrow }}</div>
 <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3vw,38px);font-weight:600;color:#F5F2E9;margin:10px 0 0">{{ fireworks.title }}</h2>
@@ -229,7 +218,7 @@ img{max-width:100%}
 <a href="#" onClick="{{ goFireworks }}" style="display:inline-flex;margin-top:22px;padding:13px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ fireworks.homeCta }}</a>
 <div style="font-size:12px;line-height:1.6;color:rgba(245,242,233,.5);margin-top:20px;padding-top:16px;border-top:1px solid rgba(245,242,233,.18)">{{ fireworks.homeNote }}</div>
 </div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
 <sc-for list="{{ fireworkCards }}" as="f" hint-placeholder-count="3">
 <a href="#" onClick="{{ goFireworks }}" style="display:block">
 <div style="position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:rgba(245,242,233,.08);color:#F5F2E9"><image-slot id="{{ f.slot }}" style="color:#F5F2E9" shape="rect" src="{{ f.photo }}" placeholder="Photo"></image-slot></div>
@@ -241,7 +230,7 @@ img{max-width:100%}
 </div>
 </section>
 
-<section style="width:min(1440px,94vw);margin:0 auto;padding:56px 0 70px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
+<section class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;padding:56px 0 70px;display:grid;grid-template-columns:1fr 1fr;gap:28px">
 <div style="background:#003B46;border-radius:12px;padding:34px">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#F5F2E9;margin:0">{{ home.workshopTitle }}</h3>
 <p style="font-size:14px;line-height:1.65;color:rgba(245,242,233,.72);margin:12px 0 0;max-width:38ch">{{ home.workshopBlurb }}</p>
@@ -250,7 +239,7 @@ img{max-width:100%}
 <div style="border:1px solid rgba(0,59,70,.14);border-radius:12px;padding:34px">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;margin:0">{{ home.showcaseTitle }}</h3>
 <p style="font-size:14px;line-height:1.65;color:rgba(0,59,70,.65);margin:12px 0 0">{{ home.showcaseBlurb }}</p>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 0">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 0">
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="ris-home-s1" shape="rect" placeholder="Photo"></image-slot></div>
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="ris-home-s2" shape="rect" placeholder="Photo"></image-slot></div>
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="ris-home-s3" shape="rect" placeholder="Photo"></image-slot></div>
@@ -265,7 +254,7 @@ img{max-width:100%}
 <div style="background:#FBF8F3;padding-bottom:70px">
 
 <section style="background:#F3EDE3">
-<div style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:1fr 1.05fr;gap:0;align-items:stretch;min-height:460px">
+<div class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:1fr 1.05fr;gap:0;align-items:stretch;min-height:460px">
 <div style="display:flex;flex-direction:column;justify-content:center;padding:64px 54px 64px 0">
 <div style="font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:#6B7A5A">{{ dept.label }} — new season</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(36px,4.4vw,58px);font-weight:500;line-height:1.08;letter-spacing:-.01em;margin:18px 0 0;color:#2E3327">{{ dept.title }}</h1>
@@ -289,7 +278,7 @@ img{max-width:100%}
 </div>
 </section>
 
-<section style="width:min(1440px,94vw);margin:0 auto;margin:-34px auto 0;position:relative;z-index:2;background:#fff;border-radius:8px;box-shadow:0 10px 30px rgba(63,74,53,.08);display:grid;grid-template-columns:repeat(4,1fr)">
+<section class="ris-g45" style="width:min(1440px,94vw);margin:0 auto;margin:-34px auto 0;position:relative;z-index:2;background:#fff;border-radius:8px;box-shadow:0 10px 30px rgba(63,74,53,.08);display:grid;grid-template-columns:repeat(4,1fr)">
 <sc-for list="{{ boutiquePerks }}" as="pk" hint-placeholder-count="4">
 <div style="padding:22px 26px;border-right:1px solid rgba(63,74,53,.1)">
 <div style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#2E3327">{{ pk.title }}</div>
@@ -325,7 +314,7 @@ img{max-width:100%}
 </div>
 <div style="margin-left:auto;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#6B7A5A">{{ dept.count }} styles</div>
 </div>
-<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:24px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:24px">
 <sc-for list="{{ deptList }}" as="item" hint-placeholder-count="5">
 <div style="display:flex;flex-direction:column">
 <a href="#" onClick="{{ item.open }}" style="position:relative;display:block;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:#E7DDCD">
@@ -351,7 +340,7 @@ img{max-width:100%}
 
 <sc-if value="{{ dept.hasPromos }}">
 <section style="width:min(1440px,94vw);margin:0 auto;padding:56px 0 0">
-<div style="position:relative;border-radius:10px;overflow:hidden;background:#E7DDCD;display:grid;grid-template-columns:1fr 1.2fr;min-height:280px">
+<div class="ris-g2col" style="position:relative;border-radius:10px;overflow:hidden;background:#E7DDCD;display:grid;grid-template-columns:1fr 1.2fr;min-height:280px">
 <div style="padding:44px 40px;display:flex;flex-direction:column;justify-content:center;background:#F3EDE3">
 <div style="font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:#6B7A5A">{{ boutiquePromo.kicker }}</div>
 <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,2.6vw,34px);font-weight:500;line-height:1.2;margin:14px 0 0;color:#2E3327">{{ boutiquePromo.title }}</div>
@@ -369,7 +358,7 @@ img{max-width:100%}
 <div style="font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:#6B7A5A">{{ dept.collectionsBlurb }}</div>
 <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,2.6vw,34px);font-weight:500;margin:10px 0 0;color:#2E3327">{{ dept.collectionsTitle }}</h2>
 </div>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
 <sc-for list="{{ dept.collections }}" as="col" hint-placeholder-count="4">
 <div style="position:relative;border-radius:8px;overflow:hidden;min-height:280px;background:#E7DDCD">
 <div style="position:absolute;inset:0"><image-slot id="{{ col.slot }}" shape="rect" src="{{ col.photo }}" placeholder="Photo"></image-slot></div>
@@ -420,7 +409,7 @@ img{max-width:100%}
 <h2 style="font-family:Oswald,Helvetica,sans-serif;font-size:clamp(22px,2.4vw,30px);font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:#F5F2E9;margin:0">{{ dept.gridTitle }}</h2>
 <div style="margin-left:auto;font-size:12px;color:rgba(245,242,233,.5)">{{ dept.gridNote }}</div>
 </div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
 <sc-for list="{{ deptList }}" as="item" hint-placeholder-count="6">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#356168;border:1px solid rgba(245,242,233,.18)" style-hover="border-color:#C79A6B">
 <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#2B5157"><image-slot id="{{ item.shopSlot }}" style="color:#F5F2E9" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot>
@@ -443,7 +432,7 @@ img{max-width:100%}
 </div>
 
 <sc-if value="{{ dept.hasPromos }}">
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px">
 <sc-for list="{{ dept.promos }}" as="pr" hint-placeholder-count="3">
 <div style="position:relative;overflow:hidden;min-height:210px;background:#356168;border:1px solid rgba(245,242,233,.12)">
 <div style="position:absolute;inset:0;color:#F5F2E9"><image-slot id="{{ pr.slot }}" style="color:#F5F2E9" shape="rect" src="{{ pr.photo }}" placeholder="Photo"></image-slot></div>
@@ -463,7 +452,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isOtherDept }}">
-<section style="position:relative;background:#003B46;overflow:hidden;height:320px">
+<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:320px">
 <div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="{{ dept.heroSlot }}" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the department photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ dept.tint }};pointer-events:none"></div>
@@ -499,7 +488,7 @@ img{max-width:100%}
 </div>
 <div style="margin-left:auto;font-size:12px;color:rgba(0,59,70,.55)">{{ dept.count }} items</div>
 </div>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
 <sc-for list="{{ deptList }}" as="item" hint-placeholder-count="8">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.shopSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot>
@@ -523,7 +512,7 @@ img{max-width:100%}
 </section>
 
 <sc-if value="{{ dept.hasPromos }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:50px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+<section class="ris-g3" style="width:min(1440px,94vw);margin:0 auto;padding:50px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
 <sc-for list="{{ dept.promos }}" as="pr" hint-placeholder-count="3">
 <div style="position:relative;border-radius:12px;overflow:hidden;min-height:200px;background:#003B46">
 <div style="position:absolute;inset:0;color:#F5F2E9"><image-slot id="{{ pr.slot }}" style="color:#F5F2E9" shape="rect" src="{{ pr.photo }}" placeholder="Photo"></image-slot></div>
@@ -543,7 +532,7 @@ img{max-width:100%}
 <section style="width:min(1440px,94vw);margin:0 auto;padding:50px 0 70px">
 <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(22px,2.4vw,30px);font-weight:600;margin:0">{{ dept.collectionsTitle }}</h2>
 <p style="font-size:13.5px;color:rgba(0,59,70,.6);margin:7px 0 22px">{{ dept.collectionsBlurb }}</p>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
 <sc-for list="{{ dept.collections }}" as="col" hint-placeholder-count="4">
 <div style="position:relative;border-radius:12px;overflow:hidden;min-height:240px;background:#003B46">
 <div style="position:absolute;inset:0;color:#F5F2E9"><image-slot id="{{ col.slot }}" style="color:#F5F2E9" shape="rect" src="{{ col.photo }}" placeholder="Photo"></image-slot></div>
@@ -565,7 +554,7 @@ img{max-width:100%}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start">
 <div>
 <div style="aspect-ratio:1;border-radius:12px;overflow:hidden;background:#fff"><image-slot id="{{ p.pdpSlot }}" shape="rect" src="{{ p.photo }}" placeholder="Product photo"></image-slot></div>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="{{ p.thumb1 }}" shape="rect" placeholder="Photo"></image-slot></div>
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="{{ p.thumb2 }}" shape="rect" placeholder="Photo"></image-slot></div>
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="{{ p.thumb3 }}" shape="rect" placeholder="Photo"></image-slot></div>
@@ -631,7 +620,7 @@ img{max-width:100%}
 </div>
 <div style="margin-top:64px">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:600;margin:0 0 20px">Goes well with</h3>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
 <sc-for list="{{ related }}" as="item" hint-placeholder-count="4">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:1"><image-slot id="{{ item.relSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
@@ -656,10 +645,10 @@ img{max-width:100%}
 </div>
 </sc-if>
 <sc-if value="{{ cartHasItems }}">
-<div style="display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start">
 <div style="background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:12px;overflow:hidden">
 <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="2">
-<div style="display:grid;grid-template-columns:96px 1fr auto auto;gap:20px;align-items:center;padding:18px;border-bottom:1px solid rgba(0,59,70,.1)">
+<div class="ris-g2col" style="display:grid;grid-template-columns:96px 1fr auto auto;gap:20px;align-items:center;padding:18px;border-bottom:1px solid rgba(0,59,70,.1)">
 <div style="aspect-ratio:1;border-radius:8px;overflow:hidden"><image-slot id="{{ l.cartSlot }}" shape="rect" src="{{ l.photo }}" placeholder="Photo"></image-slot></div>
 <div>
 <div style="font-size:14.5px">{{ l.name }}</div>
@@ -704,11 +693,11 @@ img{max-width:100%}
 </sc-if>
 <sc-if value="{{ checkoutOpen }}">
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,40px);font-weight:600;margin:0 0 26px">Checkout</h1>
-<div style="display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start">
 <div style="display:grid;gap:22px">
 <div style="background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:12px;padding:26px">
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Delivery details</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px">
 <input value="{{ buyName }}" onChange="{{ setBuyName }}" placeholder="Full name" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 <input value="{{ buyPhone }}" onChange="{{ setBuyPhone }}" placeholder="Phone" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 </div>
@@ -727,7 +716,7 @@ img{max-width:100%}
 </sc-for>
 </div>
 <input placeholder="Card number" style="width:100%;margin-top:16px;padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px;box-sizing:border-box">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
 <input placeholder="MM / YY" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 <input placeholder="CVC" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 </div>
@@ -747,7 +736,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isServices }}">
-<section style="position:relative;background:#003B46;overflow:hidden;height:330px">
+<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:330px">
 <div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 30%,0 74%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:70%"><image-slot id="ris-services" shape="rect" src="{{ services.photo }}" placeholder="Drop the workshop photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintServices }};pointer-events:none"></div>
@@ -760,7 +749,7 @@ img{max-width:100%}
 </div>
 </section>
 <section style="width:min(1440px,94vw);margin:0 auto;padding:40px 0 70px">
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
 <sc-for list="{{ services.items }}" as="s" hint-placeholder-count="3">
 <div style="border:1px solid rgba(0,59,70,.14);border-radius:12px;padding:26px;background:#fff">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;margin:0">{{ s.title }}</h3>
@@ -769,7 +758,7 @@ img{max-width:100%}
 </div>
 </sc-for>
 </div>
-<div style="background:#003B46;border-radius:12px;padding:34px;margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+<div class="ris-g2col" style="background:#003B46;border-radius:12px;padding:34px;margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
 <div>
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#F5F2E9;margin:0">{{ services.bookingTitle }}</h3>
 <p style="font-size:14px;line-height:1.7;color:rgba(245,242,233,.72);margin:12px 0 0;max-width:36ch">{{ services.bookingBlurb }}</p>
@@ -787,7 +776,7 @@ img{max-width:100%}
 <textarea value="{{ svcIssue }}" onChange="{{ setSvcIssue }}" rows="4" placeholder="{{ services.issuePlaceholder }}" style="width:100%;box-sizing:border-box;padding:13px 15px;border:1px solid {{ issueBorder }};border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px;resize:vertical"></textarea>
 <div style="font-size:12px;color:#A67C52;margin-top:6px;display:{{ issueErrShow }}">Tell us what the issue is before sending.</div>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
 <input value="{{ svcDay }}" onChange="{{ setSvcDay }}" placeholder="Preferred day" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 <input value="{{ svcPhone }}" onChange="{{ setSvcPhone }}" placeholder="Phone" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 </div>
@@ -804,7 +793,7 @@ img{max-width:100%}
 <sc-if value="{{ noSearchResults }}">
 <p style="font-size:14px;color:rgba(0,59,70,.6);margin-top:16px">Nothing matched that search. Try a different word, or browse Boutique, Automotive &amp; Tech, or Fireworks from the menu.</p>
 </sc-if>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px">
 <sc-for list="{{ searchResults }}" as="item" hint-placeholder-count="4">
 <a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
@@ -834,7 +823,7 @@ img{max-width:100%}
 <sc-if value="{{ cartPrompt }}">
 <div style="margin-top:22px;padding:14px 18px;background:rgba(166,124,82,.12);border:1px solid rgba(166,124,82,.35);border-radius:10px;font-size:13.5px;color:#003B46">Create an account (or sign in) to add that item to your cart — it only takes a moment, and we'll add it for you right after.</div>
 </sc-if>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px;align-items:start">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px;align-items:start">
 <div style="background:#003B46;border-radius:12px;padding:30px">
 <div style="display:flex;gap:10px">
 <button onClick="{{ pickSignIn }}" style="padding:10px 20px;border-radius:999px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;background:{{ signInBg }};color:{{ signInFg }};border:1px solid rgba(245,242,233,.3)">Sign in</button>
@@ -856,7 +845,7 @@ img{max-width:100%}
 </div>
 </sc-if>
 
-<div style="display:grid;grid-template-columns:200px 1fr;gap:34px;margin-top:30px;align-items:start">
+<div class="ris-g2col" style="display:grid;grid-template-columns:200px 1fr;gap:34px;margin-top:30px;align-items:start">
 <div style="display:grid;gap:8px">
 <sc-for list="{{ acctTabs }}" as="t" hint-placeholder-count="4">
 <button onClick="{{ t.pick }}" style="text-align:left;padding:12px 16px;border-radius:8px;font-size:13.5px;background:{{ t.bg }};color:{{ t.fg }};border:1px solid rgba(0,59,70,.14)">{{ t.label }}</button>
@@ -866,14 +855,14 @@ img{max-width:100%}
 <sc-if value="{{ acctDetails }}">
 <div style="background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:12px;padding:26px;display:grid;gap:18px">
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Your details</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
 <div><div style="font-size:11.5px;color:rgba(0,59,70,.55)">Name</div><div style="font-size:15px;margin-top:4px;color:{{ detailColor }}">{{ acctName }}</div></div>
 <div><div style="font-size:11.5px;color:rgba(0,59,70,.55)">Phone</div><div style="font-size:15px;margin-top:4px;color:{{ detailColor }}">{{ acctPhone }}</div></div>
 <div><div style="font-size:11.5px;color:rgba(0,59,70,.55)">Email</div><div style="font-size:15px;margin-top:4px;color:{{ detailColor }}">{{ acctEmail }}</div></div>
 <div><div style="font-size:11.5px;color:rgba(0,59,70,.55)">Delivery address</div><div style="font-size:15px;margin-top:4px;color:{{ detailColor }}">{{ acctAddress }}</div></div>
 </div>
 <sc-if value="{{ editingDetails }}">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:6px;border-top:1px solid rgba(0,59,70,.12)">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:6px;border-top:1px solid rgba(0,59,70,.12)">
 <input value="{{ buyName }}" onChange="{{ setBuyName }}" placeholder="Full name" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 <input value="{{ buyPhone }}" onChange="{{ setBuyPhone }}" placeholder="Phone" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
 <input value="{{ buyEmail }}" onChange="{{ setBuyEmail }}" placeholder="Email" style="padding:13px 15px;border:1px solid rgba(0,59,70,.2);border-radius:8px;background:#F5F2E9;font-size:14px">
@@ -916,7 +905,7 @@ img{max-width:100%}
 <sc-if value="{{ noSaved }}">
 <div style="margin-top:18px;border:1px dashed rgba(0,59,70,.2);border-radius:10px;padding:34px;text-align:center;font-size:14px;color:rgba(0,59,70,.55)">{{ account.emptySaved }}</div>
 </sc-if>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px">
 <sc-for list="{{ savedList }}" as="item" hint-placeholder-count="0">
 <a href="#" onClick="{{ item.open }}" style="display:block;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.shopSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
@@ -962,7 +951,7 @@ img{max-width:100%}
 </div>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 380px;gap:34px;align-items:start;margin-top:34px">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 380px;gap:34px;align-items:start;margin-top:34px">
 <div style="display:grid;gap:16px">
 <sc-if value="{{ noReviews }}">
 <div style="border:1px dashed rgba(0,59,70,.22);border-radius:12px;padding:44px;text-align:center;font-size:14px;line-height:1.7;color:rgba(0,59,70,.6)">No reviews yet. Be the first to rate something you bought.</div>
@@ -1006,7 +995,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isContact }}">
-<section style="position:relative;background:#003B46;overflow:hidden;height:190px">
+<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:190px">
 <div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 44%,0 84%);background:#F5F2E9"></div>
 <div style="position:absolute;inset:0;clip-path:polygon(0 84%,100% 44%,100% 45.2%,0 85.2%);background:#A67C52"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:34px 0">
@@ -1014,7 +1003,7 @@ img{max-width:100%}
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,42px);font-weight:600;margin:8px 0 0">{{ contact.title }}</h1>
 </div>
 </section>
-<section style="width:min(1440px,94vw);margin:0 auto;padding:34px 0 70px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
+<section class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;padding:34px 0 70px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start">
 <div>
 <p style="font-size:15px;line-height:1.7;color:rgba(0,59,70,.75);margin:0 0 26px;max-width:42ch">{{ contact.blurb }}</p>
 <div style="display:grid;gap:22px">
@@ -1041,7 +1030,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isAbout }}">
-<section style="position:relative;background:#003B46;overflow:hidden;height:340px">
+<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:340px">
 <div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="ris-about" shape="rect" src="{{ about.photo }}" placeholder="Drop the storefront photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintAbout }};pointer-events:none"></div>
@@ -1054,7 +1043,7 @@ img{max-width:100%}
 </div>
 </section>
 <section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
-<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:52px;align-items:start">
+<div class="ris-g2col" style="display:grid;grid-template-columns:1.4fr 1fr;gap:52px;align-items:start">
 <p style="font-size:16px;line-height:1.8;color:rgba(0,59,70,.8);margin:0;max-width:60ch;text-wrap:pretty">{{ about.body }}</p>
 <div style="border-left:2px solid #A67C52;padding-left:22px;display:grid;gap:18px">
 <sc-for list="{{ about.timeline }}" as="t" hint-placeholder-count="4">
@@ -1062,7 +1051,7 @@ img{max-width:100%}
 </sc-for>
 </div>
 </div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px">
+<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px">
 <sc-for list="{{ about.values }}" as="v" hint-placeholder-count="3">
 <div style="border:1px solid rgba(0,59,70,.14);border-radius:12px;padding:26px;background:#fff">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:21px;font-weight:600;margin:0">{{ v.title }}</h3>
@@ -1074,7 +1063,7 @@ img{max-width:100%}
 </sc-if>
 
 <footer style="background:#003B46;color:#F5F2E9;padding:54px 0 30px">
-<div style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px">
+<div class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px">
 <div>
 <div style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:600">{{ brand.name }}</div>
 <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#66A5AD;margin-top:5px">{{ brand.tagline }}</div>
