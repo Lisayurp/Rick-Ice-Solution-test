@@ -57,6 +57,18 @@ img{max-width:100%}
   .ris-hero-copy p,.ris-hero-copy div{margin-left:0!important;text-align:left!important}
   .ris-hero-copy [style*="justify-content:flex-end"]{justify-content:flex-start!important}
 }
+
+/* ---- Fixed-height diagonal hero banners (Fireworks/other dept, Services,
+   Contact, About): the heading + blurb wrap onto more lines on narrow
+   screens, but the box height was frozen with overflow:hidden, so that
+   wrapped text was getting clipped off. Give these room to breathe on
+   small screens instead. ---- */
+@media (max-width:640px){
+  [style*="overflow:hidden;height:320px"],
+  [style*="overflow:hidden;height:330px"]{height:430px!important}
+  [style*="overflow:hidden;height:340px"]{height:440px!important}
+  [style*="overflow:hidden;height:190px"]{height:230px!important}
+}
 </style><script src="./rickice-chrome.js"></script><script src="./rickice-home.js"></script><script src="./rickice-services.js"></script><script src="./rickice-reviews.js"></script><script src="./rickice-contact.js"></script><script src="./rickice-about.js"></script><script src="./rickice-boutique.js"></script><script src="./rickice-automotive.js"></script><script src="./rickice-fireworks.js"></script><script src="./rickice-content.js"></script><script src="./image-slot.js"></script></helmet>
 
 <div style="min-height:100vh;background:#F5F2E9">
