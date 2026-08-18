@@ -19,7 +19,7 @@ img{max-width:100%}
 /* ---- Mobile nav (hamburger + dropdown) ---- */
 .ris-hamburger{display:none}
 @media (max-width:860px){
-  .ris-nav-links,.ris-hdr-search,.ris-hdr-saved-text{display:none!important}
+  .ris-nav-links,.ris-hdr-search,.ris-hdr-saved-text,.ris-topbar{display:none!important}
   .ris-hamburger{display:flex!important}
 }
 .ris-mobile-panel a{display:block;padding:13px 0;border-bottom:1px solid rgba(245,242,233,.14);font-size:14px}
@@ -74,7 +74,7 @@ img{max-width:100%}
 <div style="min-height:100vh;background:#F5F2E9">
 
 <header style="position:sticky;top:0;z-index:60;background:{{ hdrBg }}">
-<div style="background:{{ hdrTopBg }}">
+<div class="ris-topbar" style="background:{{ hdrTopBg }}">
 <div style="width:min(1440px,94vw);margin:0 auto;display:flex;align-items:center;gap:18px;padding:8px 0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#F5F2E9">
 <span>{{ topBar.message }}</span>
 <span style="margin-left:auto;display:flex;gap:18px">
@@ -125,6 +125,8 @@ img{max-width:100%}
 <a href="#" onClick="{{ goContact }}" style="color:#F5F2E9">Contact</a>
 <a href="#" onClick="{{ goAccount }}" style="color:#F5F2E9">Account</a>
 <a href="#" onClick="{{ goSaved }}" style="color:#F5F2E9">Saved · {{ savedCount }}</a>
+<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9">{{ topBar.linkA }}</a>
+<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9">{{ topBar.linkC }}</a>
 </div>
 </sc-if>
 </header>
