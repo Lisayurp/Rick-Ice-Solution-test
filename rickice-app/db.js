@@ -2,10 +2,14 @@ const { Pool } = require('pg');
 
 const connectionString = process.env.POSTGRES_URL;
 const isLocal = /localhost|127\.0\.0\.1/.test(connectionString || '');
+const hasSslMode = /[?&]sslmode=/.test(connectionString || '');
 
+/* Managed providers (Neon, Prisma Postgres, Supabase, ...) already encode
+   sslmode= in the connection string, so let pg parse that itself. Only
+   force a permissive SSL config for providers that don't specify one. */
 const pool = new Pool({
   connectionString,
-  ssl: connectionString && !isLocal ? { rejectUnauthorized: false } : false
+  ssl: hasSslMode || isLocal ? undefined : { rejectUnauthorized: false }
 });
 
 /* Turns a tagged template into a normal parameterised query, e.g.
