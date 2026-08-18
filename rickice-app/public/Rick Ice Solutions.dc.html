@@ -37,15 +37,19 @@ img{max-width:100%}
   .ris-g2col{grid-template-columns:1fr!important;gap:20px!important}
 }
 
-/* ---- Homepage hero: stack instead of diagonal-split overlay on narrow screens ---- */
+/* ---- Homepage hero: stack the two photos instead of a diagonal split on
+   narrow screens, but keep each headline overlaid ON its own photo (like
+   desktop) instead of pushed below both photos. ---- */
 @media (max-width:760px){
-  .ris-hero-diagonal{height:auto!important;min-height:0!important;display:flex!important;flex-direction:column!important}
+  .ris-hero-diagonal{height:600px!important;min-height:0!important;display:flex!important;flex-direction:column!important}
   .ris-hero-half{position:relative!important;inset:auto!important;clip-path:none!important;flex:none!important;height:300px!important;overflow:hidden}
   .ris-hero-photo{height:100%!important;top:0!important;bottom:auto!important}
   .ris-hero-divider{display:none!important}
-  .ris-hero-overlay{position:relative!important;inset:auto!important;pointer-events:auto!important;padding:0!important}
-  .ris-hero-copy-row{position:relative!important;height:auto!important}
-  .ris-hero-copy{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:auto!important;max-width:none!important;text-align:left!important;padding:28px 20px 34px!important}
+  .ris-hero-overlay{position:absolute!important;inset:0!important;pointer-events:none!important;padding:0!important}
+  .ris-hero-copy-row{position:relative!important;height:100%!important}
+  .ris-hero-copy{position:absolute!important;left:0!important;right:auto!important;bottom:auto!important;width:auto!important;max-width:none!important;text-align:left!important;padding:22px 20px 0!important;pointer-events:auto!important}
+  .ris-hero-copy:first-of-type{top:0!important;height:300px!important}
+  .ris-hero-copy:last-of-type{top:300px!important;height:300px!important}
   .ris-hero-copy p,.ris-hero-copy div{margin-left:0!important;text-align:left!important}
   .ris-hero-eyebrow-row{justify-content:flex-start!important}
 }
