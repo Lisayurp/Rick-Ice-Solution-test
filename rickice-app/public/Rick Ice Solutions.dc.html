@@ -464,7 +464,7 @@ img{max-width:100%}
 <sc-if value="{{ isOtherDept }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:320px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
-<div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="{{ dept.heroSlot }}" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the department photo here"></image-slot></div>
+<div style="position:absolute;inset:0"><image-slot id="{{ dept.heroSlot }}" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the department photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ dept.tint }};pointer-events:none"></div>
 </div>
 <div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
@@ -748,7 +748,7 @@ img{max-width:100%}
 <sc-if value="{{ isServices }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:330px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 30%,0 74%);background:#F5F2E9">
-<div style="position:absolute;left:0;right:0;top:0;height:70%"><image-slot id="ris-services" shape="rect" src="{{ services.photo }}" placeholder="Drop the workshop photo here"></image-slot></div>
+<div style="position:absolute;inset:0"><image-slot id="ris-services" shape="rect" src="{{ services.photo }}" placeholder="Drop the workshop photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintServices }};pointer-events:none"></div>
 </div>
 <div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 74%,100% 30%,100% 31.2%,0 75.2%);background:#A67C52;pointer-events:none"></div>
@@ -1042,7 +1042,7 @@ img{max-width:100%}
 <sc-if value="{{ isAbout }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:340px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
-<div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="ris-about" shape="rect" src="{{ about.photo }}" placeholder="Drop the storefront photo here"></image-slot></div>
+<div style="position:absolute;inset:0"><image-slot id="ris-about" shape="rect" src="{{ about.photo }}" placeholder="Drop the storefront photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintAbout }};pointer-events:none"></div>
 </div>
 <div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
@@ -1290,7 +1290,7 @@ class Component extends DCLogic {
     return {
       label: d.label || "", title: d.title || "", blurb: d.blurb || "",
       heroPhoto: d.heroPhoto || "", heroSlot: "ris-dept-hero-" + k,
-      tint: d.heroPhoto ? "rgba(245,242,233,.6)" : "rgba(245,242,233,.28)",
+      tint: d.heroPhoto ? "linear-gradient(100deg, rgba(245,242,233,.88) 0%, rgba(245,242,233,.68) 20%, rgba(245,242,233,.28) 42%, rgba(245,242,233,.06) 58%, rgba(245,242,233,0) 75%)" : "rgba(245,242,233,.28)",
       cats, count: shown.length,
       gridTitle: this.state.cat || "New arrivals",
       gridNote: this.state.cat ? "Filtered by category." : "Fresh stock, just in.",
@@ -1525,8 +1525,8 @@ class Component extends DCLogic {
         ? "linear-gradient(100deg, rgba(245,242,233,.88) 0%, rgba(245,242,233,.68) 20%, rgba(245,242,233,.28) 42%, rgba(245,242,233,.06) 58%, rgba(245,242,233,0) 75%)"
         : "rgba(245,242,233,.28)",
       tintAuto: (c.home || {}).autoPhoto ? "rgba(0,59,70,.62)" : "rgba(0,59,70,.3)",
-      tintServices: (c.services || {}).photo ? "rgba(245,242,233,.6)" : "rgba(245,242,233,.28)",
-      tintAbout: (c.about || {}).photo ? "rgba(245,242,233,.6)" : "rgba(245,242,233,.28)",
+      tintServices: (c.services || {}).photo ? "linear-gradient(100deg, rgba(245,242,233,.88) 0%, rgba(245,242,233,.68) 20%, rgba(245,242,233,.28) 42%, rgba(245,242,233,.06) 58%, rgba(245,242,233,0) 75%)" : "rgba(245,242,233,.28)",
+      tintAbout: (c.about || {}).photo ? "linear-gradient(100deg, rgba(245,242,233,.88) 0%, rgba(245,242,233,.68) 20%, rgba(245,242,233,.28) 42%, rgba(245,242,233,.06) 58%, rgba(245,242,233,0) 75%)" : "rgba(245,242,233,.28)",
 
       bqPicks: all.filter(x => x.deptKey === "boutique").slice(0, 3),
       autoPicks: all.filter(x => x.deptKey === "automotive").slice(0, 3),
