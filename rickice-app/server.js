@@ -558,6 +558,20 @@ app.post('/api/_bootstrap/migrate', bootstrapAuth, async (req, res) => {
     res.status(500).json({ error: String(err.message || err) });
   }
 });
+
+app.post('/api/_bootstrap/cleanup-categories', bootstrapAuth, async (req, res) => {
+  try {
+    const { dept, keepNames } = req.body || {};
+    if (!dept || !Array.isArray(keepNames)) return res.status(400).json({ error: 'dept and keepNames required' });
+    const { rows } = await sql`SELECT id, name FROM categories WHERE dept = ${dept}`;
+    const toDelete = rows.filter(r => !keepNames.includes(r.name));
+    for (const r of toDelete) await sql`DELETE FROM categories WHERE id = ${r.id}`;
+    res.json({ ok: true, deleted: toDelete.map(r => r.name) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: String(err.message || err) });
+  }
+});
 /* ---------- END TEMPORARY BLOCK ---------- */
 
 /* ---------- the site ----------
