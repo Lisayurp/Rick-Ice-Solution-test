@@ -57,6 +57,12 @@ img{max-width:100%}
    small screens instead. ---- */
 @media (max-width:640px){
   .ris-hero-fixed{height:auto!important;min-height:260px!important;padding-bottom:24px!important}
+  /* The diagonal cut used to sit safely below a one-line desktop heading.
+     Now that height is content-driven, extend the light shape down the
+     left edge (where the text sits) so wrapped text never lands on the
+     dark background behind it and becomes unreadable. */
+  .ris-hero-fixed-bg{clip-path:polygon(0 0,100% 0,100% 16%,0 100%)!important}
+  .ris-hero-fixed-accent{clip-path:polygon(0 100%,100% 16%,100% 17.6%,0 101.6%)!important}
 }
 </style><script src="./rickice-chrome.js"></script><script src="./rickice-home.js"></script><script src="./rickice-services.js"></script><script src="./rickice-reviews.js"></script><script src="./rickice-contact.js"></script><script src="./rickice-about.js"></script><script src="./rickice-boutique.js"></script><script src="./rickice-automotive.js"></script><script src="./rickice-fireworks.js"></script><script src="./rickice-content.js"></script><script src="./image-slot.js"></script></helmet>
 
@@ -453,11 +459,11 @@ img{max-width:100%}
 
 <sc-if value="{{ isOtherDept }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:320px">
-<div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
+<div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="{{ dept.heroSlot }}" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the department photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ dept.tint }};pointer-events:none"></div>
 </div>
-<div style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
+<div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:40px 0;pointer-events:none">
 <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,59,70,.55)">Home / {{ dept.label }}</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,3.6vw,46px);font-weight:600;margin:8px 0 0;max-width:22ch">{{ dept.title }}</h1>
@@ -737,11 +743,11 @@ img{max-width:100%}
 
 <sc-if value="{{ isServices }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:330px">
-<div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 30%,0 74%);background:#F5F2E9">
+<div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 30%,0 74%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:70%"><image-slot id="ris-services" shape="rect" src="{{ services.photo }}" placeholder="Drop the workshop photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintServices }};pointer-events:none"></div>
 </div>
-<div style="position:absolute;inset:0;clip-path:polygon(0 74%,100% 30%,100% 31.2%,0 75.2%);background:#A67C52;pointer-events:none"></div>
+<div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 74%,100% 30%,100% 31.2%,0 75.2%);background:#A67C52;pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:44px 0;pointer-events:none">
 <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,59,70,.55)">Home / Services</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,3.6vw,46px);font-weight:600;margin:8px 0 0">{{ services.title }}</h1>
@@ -996,8 +1002,8 @@ img{max-width:100%}
 
 <sc-if value="{{ isContact }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:190px">
-<div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 44%,0 84%);background:#F5F2E9"></div>
-<div style="position:absolute;inset:0;clip-path:polygon(0 84%,100% 44%,100% 45.2%,0 85.2%);background:#A67C52"></div>
+<div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 44%,0 84%);background:#F5F2E9"></div>
+<div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 84%,100% 44%,100% 45.2%,0 85.2%);background:#A67C52"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:34px 0">
 <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,59,70,.55)">Home / Contact</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,42px);font-weight:600;margin:8px 0 0">{{ contact.title }}</h1>
@@ -1031,11 +1037,11 @@ img{max-width:100%}
 
 <sc-if value="{{ isAbout }}">
 <section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:340px">
-<div style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
+<div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
 <div style="position:absolute;left:0;right:0;top:0;height:72%"><image-slot id="ris-about" shape="rect" src="{{ about.photo }}" placeholder="Drop the storefront photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintAbout }};pointer-events:none"></div>
 </div>
-<div style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
+<div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 76%,100% 32%,100% 33.2%,0 77.2%);background:#A67C52;pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:44px 0;pointer-events:none">
 <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,59,70,.55)">Home / About</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,3.6vw,46px);font-weight:600;margin:8px 0 0;max-width:20ch">{{ about.title }}</h1>
