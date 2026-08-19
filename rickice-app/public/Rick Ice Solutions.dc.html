@@ -27,33 +27,54 @@ img{max-width:100%}
 .hov-gold,.hov-cream-navy,.hov-border-gold,.hov-accent,.hov-fill-navy,.hov-navy,
 .hov-fill-olive,.hov-cream,.hov-border-tan,.hov-border-gold-text-gold,
 .hov-border-olive-text-olive,.hov-fill-topbg,.hov-cream-dark{
-  transition:color .16s ease,background-color .16s ease,border-color .16s ease;
+  transition:color .22s cubic-bezier(.2,.8,.2,1),background-color .22s cubic-bezier(.2,.8,.2,1),
+    border-color .22s cubic-bezier(.2,.8,.2,1),transform .22s cubic-bezier(.2,.8,.2,1),
+    box-shadow .22s cubic-bezier(.2,.8,.2,1);
 }
 .hov-gold:hover{color:#A67C52!important}
-.hov-cream-navy:hover{background:#F5F2E9!important;color:#003B46!important}
 .hov-border-gold:hover{border-color:#A67C52!important}
 .hov-accent:hover{color:#66A5AD!important}
-.hov-fill-navy:hover{background:#003B46!important}
 .hov-navy:hover{color:#003B46!important}
-.hov-fill-olive:hover{background:#6B7A5A!important}
 .hov-cream:hover{color:#F5F2E9!important}
 .hov-border-tan:hover{border-color:#C79A6B!important}
 .hov-border-gold-text-gold:hover{border-color:#A67C52!important;color:#A67C52!important}
 .hov-border-olive-text-olive:hover{border-color:#3F4A35!important;color:#3F4A35!important}
-.hov-fill-topbg:hover{background:#A67C52!important;border-color:#A67C52!important}
-.hov-cream-dark:hover{background:#F5F2E9!important;color:#12262A!important}
 
-/* ---- Page-switch fade: each page's top-level section is freshly inserted
-   into the DOM when you navigate to it (not just shown/hidden), so a plain
-   CSS animation on it plays automatically every time you switch pages. ---- */
-@keyframes ris-page-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ris-page{animation:ris-page-in .32s ease both}
+/* ---- Fill-swap hovers read as buttons (pill CTAs, the cart control), so
+   they get a small lift + shadow on top of the color swap -- a plain color
+   change felt flat on something that's meant to be pressed. ---- */
+.hov-cream-navy,.hov-fill-navy,.hov-fill-olive,.hov-fill-topbg,.hov-cream-dark{
+  box-shadow:0 0 0 rgba(0,0,0,0);
+}
+.hov-cream-navy:hover{background:#F5F2E9!important;color:#003B46!important;transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,59,70,.18)}
+.hov-fill-navy:hover{background:#003B46!important;transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,59,70,.22)}
+.hov-fill-olive:hover{background:#6B7A5A!important;transform:translateY(-2px);box-shadow:0 6px 14px rgba(59,63,45,.22)}
+.hov-fill-topbg:hover{background:#A67C52!important;border-color:#A67C52!important;transform:translateY(-2px);box-shadow:0 6px 14px rgba(166,124,82,.3)}
+.hov-cream-dark:hover{background:#F5F2E9!important;color:#12262A!important;transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,.16)}
 
-/* ---- Active nav link: an underline showing which page you're on. Every
-   link reserves the same border space so turning it on/off never shifts
-   the header's height -- only the line's color changes. ---- */
-.ris-nav-links a{padding-bottom:6px;border-bottom:2px solid transparent}
-.ris-nav-links a.nav-active{color:#66A5AD!important;border-bottom-color:#66A5AD!important}
+/* ---- Page-switch entrance: each page's top-level section is freshly
+   inserted into the DOM when you navigate to it (not just shown/hidden),
+   so a plain CSS animation on it plays automatically every time you
+   switch pages. A slow-settling "ease-out-expo" curve with a touch of
+   scale reads as a deliberate arrival, not just a fade. ---- */
+@keyframes ris-page-in{
+  from{opacity:0;transform:translateY(18px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.ris-page{animation:ris-page-in .6s cubic-bezier(.16,1,.3,1) both}
+
+/* ---- Active nav link: a sliding underline instead of a flat color swap.
+   It sits collapsed (scaleX(0)) on every link, grows in on hover, and
+   stays grown for whichever page you're actually on -- so hovering a link
+   previews exactly what "being there" looks like. ---- */
+.ris-nav-links a{position:relative;padding-bottom:6px}
+.ris-nav-links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:#66A5AD;transform:scaleX(0);transform-origin:left;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.ris-nav-links a:hover::after,.ris-nav-links a.nav-active::after{transform:scaleX(1)}
+.ris-nav-links a.nav-active{color:#66A5AD!important}
 
 /* ---- Mobile nav (hamburger + dropdown) ---- */
 .ris-hamburger{display:none}
@@ -61,8 +82,8 @@ img{max-width:100%}
   .ris-nav-links,.ris-hdr-search,.ris-hdr-saved-text,.ris-topbar{display:none!important}
   .ris-hamburger{display:flex!important}
 }
-.ris-mobile-panel a{display:block;padding:13px 0 13px 12px;border-bottom:1px solid rgba(245,242,233,.14);border-left:3px solid transparent;font-size:14px}
-.ris-mobile-panel a.nav-active{color:#66A5AD!important;border-left-color:#66A5AD!important}
+.ris-mobile-panel a{display:block;padding:13px 0 13px 12px;border-bottom:1px solid rgba(245,242,233,.14);border-left:3px solid transparent;font-size:14px;transition:color .2s ease,border-left-color .2s ease,background-color .2s ease}
+.ris-mobile-panel a.nav-active{color:#66A5AD!important;border-left-color:#66A5AD!important;background:rgba(102,165,173,.08)}
 
 /* ---- Fixed grids collapse on narrower screens (product/category/promo grids, two-up panels) ----
    Real classes, not [style*="..."] attribute matching: the page's template
