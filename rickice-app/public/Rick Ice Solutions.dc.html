@@ -16,6 +16,34 @@ input,select,textarea{font:inherit;color:#003B46}
 html,body{overflow-x:hidden;max-width:100%}
 img{max-width:100%}
 
+/* ---- Hover states: the markup carries a `style-hover="..."` attribute
+   throughout the page meant to encode a hover effect, but nothing in the
+   framework ever reads that attribute -- it does nothing at all, on any
+   element, anywhere. Since it's a custom attribute (not `style`), it isn't
+   rewritten/reformatted by the browser the way inline `style` is, so a
+   plain attribute-value selector reliably matches it. This turns every one
+   of those declarations into a real, smoothly-animated :hover rule. ---- */
+[style-hover]{transition:color .16s ease,background-color .16s ease,border-color .16s ease}
+[style-hover="color:#A67C52"]:hover{color:#A67C52!important}
+[style-hover="background:#F5F2E9;color:#003B46"]:hover{background:#F5F2E9!important;color:#003B46!important}
+[style-hover="border-color:#A67C52"]:hover{border-color:#A67C52!important}
+[style-hover="color:#66A5AD"]:hover{color:#66A5AD!important}
+[style-hover="background:#003B46"]:hover{background:#003B46!important}
+[style-hover="color:#003B46"]:hover{color:#003B46!important}
+[style-hover="background:#6B7A5A"]:hover{background:#6B7A5A!important}
+[style-hover="color:#F5F2E9"]:hover{color:#F5F2E9!important}
+[style-hover="border-color:#C79A6B"]:hover{border-color:#C79A6B!important}
+[style-hover="border-color:#A67C52;color:#A67C52"]:hover{border-color:#A67C52!important;color:#A67C52!important}
+[style-hover="border-color:#3F4A35;color:#3F4A35"]:hover{border-color:#3F4A35!important;color:#3F4A35!important}
+[style-hover="background:#A67C52;border-color:#A67C52"]:hover{background:#A67C52!important;border-color:#A67C52!important}
+[style-hover="background:#F5F2E9;color:#12262A"]:hover{background:#F5F2E9!important;color:#12262A!important}
+
+/* ---- Page-switch fade: each page's top-level section is freshly inserted
+   into the DOM when you navigate to it (not just shown/hidden), so a plain
+   CSS animation on it plays automatically every time you switch pages. ---- */
+@keyframes ris-page-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ris-page{animation:ris-page-in .32s ease both}
+
 /* ---- Mobile nav (hamburger + dropdown) ---- */
 .ris-hamburger{display:none}
 @media (max-width:860px){
@@ -145,7 +173,7 @@ img{max-width:100%}
 </div>
 </div>
 </sc-if>
-<section class="ris-hero-diagonal" style="position:relative;height:min(78vh,660px);min-height:520px;overflow:hidden;background:#003B46">
+<section class="ris-page ris-hero-diagonal" style="position:relative;height:min(78vh,660px);min-height:520px;overflow:hidden;background:#003B46">
 <div class="ris-hero-half" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 26%,0 78%);background:#EFE9DC">
 <div class="ris-hero-photo" style="position:absolute;inset:0"><image-slot id="ris-home-bq" shape="rect" src="{{ home.bqPhoto }}" placeholder="Drop the BOUTIQUE photo here — upper half"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintBq }};pointer-events:none"></div>
@@ -264,7 +292,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isBoutiqueDept }}">
-<div style="background:#FBF8F3;padding-bottom:70px">
+<div class="ris-page" style="background:#FBF8F3;padding-bottom:70px">
 
 <section style="background:#F3EDE3">
 <div class="ris-g2col" style="width:min(1440px,94vw);margin:0 auto;display:grid;grid-template-columns:1fr 1.05fr;gap:0;align-items:stretch;min-height:460px">
@@ -390,7 +418,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isAutoDept }}">
-<section style="position:relative;background:#2B5157;overflow:hidden;min-height:400px">
+<section class="ris-page" style="position:relative;background:#2B5157;overflow:hidden;min-height:400px">
 <div style="position:absolute;inset:0"><image-slot id="{{ dept.heroSlot }}" style="color:#F5F2E9" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the garage photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(43,81,87,.9) 42%,rgba(43,81,87,.45));pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:74px 0;pointer-events:none">
@@ -465,7 +493,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isOtherDept }}">
-<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:320px">
+<section class="ris-page ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:320px">
 <div style="position:absolute;inset:0"><image-slot id="{{ dept.heroSlot }}" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the department photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ dept.tint }};pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:40px 0;pointer-events:none">
@@ -559,7 +587,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isProduct }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:40px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:40px 0 70px">
 <div style="font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,59,70,.5);margin-bottom:26px">Home / {{ p.deptLabel }} / {{ p.name }}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start">
 <div>
@@ -646,7 +674,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isCart }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,40px);font-weight:600;margin:0 0 26px">Your cart</h1>
 <sc-if value="{{ cartEmpty }}">
 <div style="border:1px solid rgba(0,59,70,.14);border-radius:12px;padding:44px;text-align:center">
@@ -689,7 +717,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isCheckout }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
 <sc-if value="{{ orderPlaced }}">
 <div style="border:1px solid #A67C52;border-radius:12px;padding:56px;text-align:center;background:#fff">
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#A67C52">Order confirmed</div>
@@ -746,7 +774,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isServices }}">
-<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:330px">
+<section class="ris-page ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:330px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 30%,0 74%);background:#F5F2E9">
 <div style="position:absolute;inset:0"><image-slot id="ris-services" shape="rect" src="{{ services.photo }}" placeholder="Drop the workshop photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintServices }};pointer-events:none"></div>
@@ -797,7 +825,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isSearch }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Search</div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3vw,38px);font-weight:600;margin:8px 0 0">{{ searchCount }} result(s) for "{{ searchQuery }}"</h1>
 <sc-if value="{{ noSearchResults }}">
@@ -819,7 +847,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isAccount }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
 <div style="display:flex;align-items:flex-end;gap:20px">
 <div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,42px);font-weight:600;margin:0">{{ account.title }}</h1>
@@ -948,7 +976,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isShowcase }}">
-<section style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
+<section class="ris-page" style="width:min(1440px,94vw);margin:0 auto;padding:44px 0 70px">
 <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap">
 <div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(28px,3.2vw,42px);font-weight:600;margin:0">Reviews</h1>
@@ -1005,7 +1033,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isContact }}">
-<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:190px">
+<section class="ris-page ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:190px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 44%,0 84%);background:#F5F2E9"></div>
 <div class="ris-hero-fixed-accent" style="position:absolute;inset:0;clip-path:polygon(0 84%,100% 44%,100% 45.2%,0 85.2%);background:#A67C52"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:34px 0">
@@ -1040,7 +1068,7 @@ img{max-width:100%}
 </sc-if>
 
 <sc-if value="{{ isAbout }}">
-<section class="ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:340px">
+<section class="ris-page ris-hero-fixed" style="position:relative;background:#003B46;overflow:hidden;height:340px">
 <div class="ris-hero-fixed-bg" style="position:absolute;inset:0;clip-path:polygon(0 0,100% 0,100% 32%,0 76%);background:#F5F2E9">
 <div style="position:absolute;inset:0"><image-slot id="ris-about" shape="rect" src="{{ about.photo }}" placeholder="Drop the storefront photo here"></image-slot></div>
 <div style="position:absolute;inset:0;background:{{ tintAbout }};pointer-events:none"></div>
