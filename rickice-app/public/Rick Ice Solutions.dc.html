@@ -16,27 +16,32 @@ input,select,textarea{font:inherit;color:#003B46}
 html,body{overflow-x:hidden;max-width:100%}
 img{max-width:100%}
 
-/* ---- Hover states: the markup carries a `style-hover="..."` attribute
-   throughout the page meant to encode a hover effect, but nothing in the
-   framework ever reads that attribute -- it does nothing at all, on any
-   element, anywhere. Since it's a custom attribute (not `style`), it isn't
-   rewritten/reformatted by the browser the way inline `style` is, so a
-   plain attribute-value selector reliably matches it. This turns every one
-   of those declarations into a real, smoothly-animated :hover rule. ---- */
-[style-hover]{transition:color .16s ease,background-color .16s ease,border-color .16s ease}
-[style-hover="color:#A67C52"]:hover{color:#A67C52!important}
-[style-hover="background:#F5F2E9;color:#003B46"]:hover{background:#F5F2E9!important;color:#003B46!important}
-[style-hover="border-color:#A67C52"]:hover{border-color:#A67C52!important}
-[style-hover="color:#66A5AD"]:hover{color:#66A5AD!important}
-[style-hover="background:#003B46"]:hover{background:#003B46!important}
-[style-hover="color:#003B46"]:hover{color:#003B46!important}
-[style-hover="background:#6B7A5A"]:hover{background:#6B7A5A!important}
-[style-hover="color:#F5F2E9"]:hover{color:#F5F2E9!important}
-[style-hover="border-color:#C79A6B"]:hover{border-color:#C79A6B!important}
-[style-hover="border-color:#A67C52;color:#A67C52"]:hover{border-color:#A67C52!important;color:#A67C52!important}
-[style-hover="border-color:#3F4A35;color:#3F4A35"]:hover{border-color:#3F4A35!important;color:#3F4A35!important}
-[style-hover="background:#A67C52;border-color:#A67C52"]:hover{background:#A67C52!important;border-color:#A67C52!important}
-[style-hover="background:#F5F2E9;color:#12262A"]:hover{background:#F5F2E9!important;color:#12262A!important}
+/* ---- Hover states: the markup carried a `style-hover="..."` attribute
+   throughout the page meant to encode a hover effect. The framework does
+   process it -- it compiles it into an auto-generated class like `.scp1`
+   with a `.scp1:hover{ }` rule -- but never fills in the actual
+   declarations, so every hover effect on the site was a no-op. That's a
+   bug inside the (minified) framework itself, not safely patchable here,
+   so real classes replace `style-hover` on every element that had it,
+   each wired to an actual, smoothly-animated :hover rule. ---- */
+.hov-gold,.hov-cream-navy,.hov-border-gold,.hov-accent,.hov-fill-navy,.hov-navy,
+.hov-fill-olive,.hov-cream,.hov-border-tan,.hov-border-gold-text-gold,
+.hov-border-olive-text-olive,.hov-fill-topbg,.hov-cream-dark{
+  transition:color .16s ease,background-color .16s ease,border-color .16s ease;
+}
+.hov-gold:hover{color:#A67C52!important}
+.hov-cream-navy:hover{background:#F5F2E9!important;color:#003B46!important}
+.hov-border-gold:hover{border-color:#A67C52!important}
+.hov-accent:hover{color:#66A5AD!important}
+.hov-fill-navy:hover{background:#003B46!important}
+.hov-navy:hover{color:#003B46!important}
+.hov-fill-olive:hover{background:#6B7A5A!important}
+.hov-cream:hover{color:#F5F2E9!important}
+.hov-border-tan:hover{border-color:#C79A6B!important}
+.hov-border-gold-text-gold:hover{border-color:#A67C52!important;color:#A67C52!important}
+.hov-border-olive-text-olive:hover{border-color:#3F4A35!important;color:#3F4A35!important}
+.hov-fill-topbg:hover{background:#A67C52!important;border-color:#A67C52!important}
+.hov-cream-dark:hover{background:#F5F2E9!important;color:#12262A!important}
 
 /* ---- Page-switch fade: each page's top-level section is freshly inserted
    into the DOM when you navigate to it (not just shown/hidden), so a plain
@@ -105,8 +110,8 @@ img{max-width:100%}
 <div style="width:min(1440px,94vw);margin:0 auto;display:flex;align-items:center;gap:18px;padding:8px 0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#F5F2E9">
 <span>{{ topBar.message }}</span>
 <span style="margin-left:auto;display:flex;gap:18px">
-<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:#003B46">{{ topBar.linkA }}</a>
-<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:#003B46">{{ topBar.linkC }}</a>
+<a class="hov-navy" href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:#003B46">{{ topBar.linkA }}</a>
+<a class="hov-navy" href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:#003B46">{{ topBar.linkC }}</a>
 </span>
 </div>
 </div>
@@ -119,21 +124,21 @@ img{max-width:100%}
 <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:{{ hdrAccent }};margin-top:6px">{{ brand.tagline }}</div>
 </a>
 <nav class="ris-nav-links" style="display:flex;gap:clamp(12px,1.6vw,26px);font-size:clamp(11.5px,1vw,13px);color:#F5F2E9">
-<a href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Boutique</a>
-<a href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Automotive &amp; Tech</a>
-<a href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Fireworks</a>
-<a href="#" onClick="{{ goServices }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Services</a>
-<a href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Reviews</a>
-<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Contact</a>
+<a class="hov-accent" href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Boutique</a>
+<a class="hov-accent" href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Automotive &amp; Tech</a>
+<a class="hov-accent" href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Fireworks</a>
+<a class="hov-accent" href="#" onClick="{{ goServices }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Services</a>
+<a class="hov-accent" href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Reviews</a>
+<a class="hov-accent" href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Contact</a>
 </nav>
 <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
 <div class="ris-hdr-search" style="display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid rgba(245,242,233,.28);border-radius:999px;min-width:clamp(120px,16vw,220px)">
 <input value="{{ searchQuery }}" onChange="{{ setSearchQuery }}" onKeyDown="{{ searchKeyDown }}" placeholder="Search products" style="border:0;background:transparent;outline:none;font-size:12px;color:#F5F2E9;width:100%">
 <a href="#" onClick="{{ runSearch }}" style="margin-left:auto;font-size:12px;color:{{ hdrAccent }};flex:none">⌕</a>
 </div>
-<a href="#" onClick="{{ goSaved }}" class="ris-hdr-saved-text" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:{{ hdrAccent }}" style-hover="color:#F5F2E9">♡ {{ savedCount }}</a>
+<a href="#" onClick="{{ goSaved }}" class="hov-cream ris-hdr-saved-text" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:{{ hdrAccent }}" style-hover="color:#F5F2E9">♡ {{ savedCount }}</a>
 <a href="#" onClick="{{ goAccount }}" class="ris-hdr-saved-text" style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:{{ hdrAccent }}">Account</a>
-<a href="#" onClick="{{ goCart }}" style="display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border:1px solid {{ hdrAccent }};border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9;white-space:nowrap;flex:none" style-hover="background:{{ hdrTopBg }};border-color:{{ hdrTopBg }}">Cart · {{ cartCount }}</a>
+<a class="hov-fill-topbg" href="#" onClick="{{ goCart }}" style="display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border:1px solid {{ hdrAccent }};border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9;white-space:nowrap;flex:none" style-hover="background:{{ hdrTopBg }};border-color:{{ hdrTopBg }}">Cart · {{ cartCount }}</a>
 <button class="ris-hamburger" onClick="{{ toggleMobileNav }}" aria-label="Menu" style="align-items:center;justify-content:center;width:34px;height:34px;flex-direction:column;gap:5px;flex:none">
 <span style="display:block;width:20px;height:2px;background:#F5F2E9"></span>
 <span style="display:block;width:20px;height:2px;background:#F5F2E9"></span>
@@ -167,8 +172,8 @@ img{max-width:100%}
 <div style="width:min(1440px,94vw);margin:0 auto;padding:12px 0;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
 <span style="font-size:13px;color:#F5F2E9">Browse freely — sign in or create an account when you're ready to add something to your cart.</span>
 <span style="margin-left:auto;display:flex;gap:10px;flex:none">
-<a href="#" onClick="{{ goSignIn }}" style="padding:8px 18px;border:1px solid #F5F2E9;border-radius:999px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9" style-hover="background:#F5F2E9;color:#003B46">Sign in</a>
-<a href="#" onClick="{{ goSignUp }}" style="padding:8px 18px;background:#003B46;border-radius:999px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9" style-hover="background:#F5F2E9;color:#003B46">Sign up</a>
+<a class="hov-cream-navy" href="#" onClick="{{ goSignIn }}" style="padding:8px 18px;border:1px solid #F5F2E9;border-radius:999px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9" style-hover="background:#F5F2E9;color:#003B46">Sign in</a>
+<a class="hov-cream-navy" href="#" onClick="{{ goSignUp }}" style="padding:8px 18px;background:#003B46;border-radius:999px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#F5F2E9" style-hover="background:#F5F2E9;color:#003B46">Sign up</a>
 </span>
 </div>
 </div>
@@ -190,13 +195,13 @@ img{max-width:100%}
 <div style="width:46px;height:1px;background:#A67C52;margin:18px 0 20px"></div>
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(32px,4vw,56px);font-weight:500;line-height:1.04;letter-spacing:-.01em;margin:0;color:#003B46">{{ home.bqTitle1 }}<br>{{ home.bqTitle2 }}</h1>
 <p style="font-size:14.5px;line-height:1.85;color:rgba(0,59,70,.7);margin:20px 0 0;max-width:32ch">{{ home.bqBlurb }}</p>
-<a href="#" onClick="{{ goBoutique }}" style="display:inline-flex;align-items:center;gap:12px;margin-top:26px;padding:0 0 8px;border-bottom:1px solid #A67C52;font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:#003B46;pointer-events:auto" style-hover="color:#A67C52">{{ home.bqCta }}</a>
+<a class="hov-gold" href="#" onClick="{{ goBoutique }}" style="display:inline-flex;align-items:center;gap:12px;margin-top:26px;padding:0 0 8px;border-bottom:1px solid #A67C52;font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:#003B46;pointer-events:auto" style-hover="color:#A67C52">{{ home.bqCta }}</a>
 </div>
 <div class="ris-hero-copy" style="position:absolute;right:0;bottom:8%;width:min(460px,48%);text-align:right">
 <div class="ris-hero-eyebrow-row" style="display:flex;align-items:center;justify-content:flex-end;gap:12px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#C79A6B">{{ home.autoEyebrow }}<span style="width:24px;height:2px;background:#C79A6B"></span></div>
 <h2 style="font-family:Oswald,Helvetica,sans-serif;font-size:clamp(30px,3.6vw,50px);font-weight:600;line-height:1;text-transform:uppercase;margin:14px 0 0;color:#F5F2E9">{{ home.autoTitle }}</h2>
 <p style="font-size:14px;line-height:1.7;color:rgba(245,242,233,.78);margin:14px 0 0;margin-left:auto;max-width:32ch">{{ home.autoBlurb }}</p>
-<a href="#" onClick="{{ goAutomotive }}" style="display:inline-flex;margin-top:22px;padding:13px 28px;background:#A67C52;color:#F5F2E9;font-family:Oswald,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;pointer-events:auto" style-hover="background:#F5F2E9;color:#12262A">{{ home.autoCta }}</a>
+<a class="hov-cream-dark" href="#" onClick="{{ goAutomotive }}" style="display:inline-flex;margin-top:22px;padding:13px 28px;background:#A67C52;color:#F5F2E9;font-family:Oswald,Helvetica,sans-serif;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;pointer-events:auto" style-hover="background:#F5F2E9;color:#12262A">{{ home.autoCta }}</a>
 </div>
 </div>
 </div>
@@ -223,7 +228,7 @@ img{max-width:100%}
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD;margin-bottom:14px">{{ home.bqPicksLabel }}</div>
 <div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 <sc-for list="{{ bqPicks }}" as="item" hint-placeholder-count="3">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:12px 13px 15px">
 <div style="font-size:13px;line-height:1.35">{{ item.name }}</div>
@@ -237,7 +242,7 @@ img{max-width:100%}
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD;margin-bottom:14px">{{ home.autoPicksLabel }}</div>
 <div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
 <sc-for list="{{ autoPicks }}" as="item" hint-placeholder-count="3">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:12px 13px 15px">
 <div style="font-size:13px;line-height:1.35">{{ item.name }}</div>
@@ -256,7 +261,7 @@ img{max-width:100%}
 <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#66A5AD">{{ fireworks.eyebrow }}</div>
 <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(26px,3vw,38px);font-weight:600;color:#F5F2E9;margin:10px 0 0">{{ fireworks.title }}</h2>
 <p style="font-size:14px;line-height:1.7;color:rgba(245,242,233,.75);margin:14px 0 0">{{ fireworks.blurb }}</p>
-<a href="#" onClick="{{ goFireworks }}" style="display:inline-flex;margin-top:22px;padding:13px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ fireworks.homeCta }}</a>
+<a class="hov-cream-navy" href="#" onClick="{{ goFireworks }}" style="display:inline-flex;margin-top:22px;padding:13px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ fireworks.homeCta }}</a>
 <div style="font-size:12px;line-height:1.6;color:rgba(245,242,233,.5);margin-top:20px;padding-top:16px;border-top:1px solid rgba(245,242,233,.18)">{{ fireworks.homeNote }}</div>
 </div>
 <div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
@@ -275,7 +280,7 @@ img{max-width:100%}
 <div style="background:#003B46;border-radius:12px;padding:34px">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;color:#F5F2E9;margin:0">{{ home.workshopTitle }}</h3>
 <p style="font-size:14px;line-height:1.65;color:rgba(245,242,233,.72);margin:12px 0 0;max-width:38ch">{{ home.workshopBlurb }}</p>
-<a href="#" onClick="{{ goServices }}" style="display:inline-flex;margin-top:24px;padding:13px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ home.workshopCta }}</a>
+<a class="hov-cream-navy" href="#" onClick="{{ goServices }}" style="display:inline-flex;margin-top:24px;padding:13px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ home.workshopCta }}</a>
 </div>
 <div style="border:1px solid rgba(0,59,70,.14);border-radius:12px;padding:34px">
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:600;margin:0">{{ home.showcaseTitle }}</h3>
@@ -301,8 +306,8 @@ img{max-width:100%}
 <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(36px,4.4vw,58px);font-weight:500;line-height:1.08;letter-spacing:-.01em;margin:18px 0 0;color:#2E3327">{{ dept.title }}</h1>
 <p style="font-size:15px;line-height:1.8;color:rgba(46,51,39,.7);margin:20px 0 0;max-width:38ch;text-wrap:pretty">{{ dept.blurb }}</p>
 <div style="display:flex;gap:14px;margin-top:32px;flex-wrap:wrap">
-<button onClick="{{ clearCat }}" style="padding:15px 30px;background:#3F4A35;color:#FBF8F3;border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase" style-hover="background:#6B7A5A">Shop new arrivals</button>
-<a href="#" onClick="{{ goShowcase }}" style="padding:15px 30px;border:1px solid rgba(63,74,53,.35);border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2E3327" style-hover="border-color:#3F4A35;color:#3F4A35">Read reviews</a>
+<button class="hov-fill-olive" onClick="{{ clearCat }}" style="padding:15px 30px;background:#3F4A35;color:#FBF8F3;border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase" style-hover="background:#6B7A5A">Shop new arrivals</button>
+<a class="hov-border-olive-text-olive" href="#" onClick="{{ goShowcase }}" style="padding:15px 30px;border:1px solid rgba(63,74,53,.35);border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2E3327" style-hover="border-color:#3F4A35;color:#3F4A35">Read reviews</a>
 </div>
 <div style="display:flex;align-items:center;gap:12px;margin-top:30px">
 <div style="font-size:14px;letter-spacing:.14em;color:#6B7A5A">{{ boutiqueStars }}</div>
@@ -386,7 +391,7 @@ img{max-width:100%}
 <div style="font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:#6B7A5A">{{ boutiquePromo.kicker }}</div>
 <div style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,2.6vw,34px);font-weight:500;line-height:1.2;margin:14px 0 0;color:#2E3327">{{ boutiquePromo.title }}</div>
 <div style="font-size:14px;line-height:1.75;color:rgba(46,51,39,.65);margin-top:12px;max-width:34ch">{{ boutiquePromo.note }}</div>
-<button onClick="{{ clearCat }}" style="align-self:flex-start;margin-top:24px;padding:14px 30px;background:#3F4A35;color:#FBF8F3;border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase" style-hover="background:#6B7A5A">{{ boutiquePromo.cta }}</button>
+<button class="hov-fill-olive" onClick="{{ clearCat }}" style="align-self:flex-start;margin-top:24px;padding:14px 30px;background:#3F4A35;color:#FBF8F3;border-radius:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase" style-hover="background:#6B7A5A">{{ boutiquePromo.cta }}</button>
 </div>
 <div style="position:relative"><image-slot id="{{ boutiquePromo.slot }}" shape="rect" src="{{ boutiquePromo.photo }}" placeholder="Photo"></image-slot></div>
 </div>
@@ -452,7 +457,7 @@ img{max-width:100%}
 </div>
 <div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
 <sc-for list="{{ deptList }}" as="item" hint-placeholder-count="6">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#356168;border:1px solid rgba(245,242,233,.18)" style-hover="border-color:#C79A6B">
+<a class="hov-border-tan" href="#" onClick="{{ item.open }}" style="display:block;background:#356168;border:1px solid rgba(245,242,233,.18)" style-hover="border-color:#C79A6B">
 <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#2B5157"><image-slot id="{{ item.shopSlot }}" style="color:#F5F2E9" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot>
 <div style="position:absolute;left:0;top:14px;padding:6px 13px;background:#A67C52;color:#F5F2E9;font-family:Oswald,Helvetica,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;display:{{ item.badgeShow }}">{{ item.badge }}</div>
 </div>
@@ -528,7 +533,7 @@ img{max-width:100%}
 </div>
 <div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
 <sc-for list="{{ deptList }}" as="item" hint-placeholder-count="8">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.shopSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot>
 <div style="position:absolute;left:12px;top:12px;padding:5px 11px;border-radius:999px;background:{{ item.badgeBg }};color:#F5F2E9;font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:{{ item.badgeShow }}">{{ item.badge }}</div>
 </div>
@@ -620,11 +625,11 @@ img{max-width:100%}
 <span style="min-width:26px;text-align:center;font-size:14px;font-weight:600">{{ qty }}</span>
 <button onClick="{{ incQty }}" style="padding:13px 18px;font-size:15px">+</button>
 </div>
-<button onClick="{{ addToCart }}" style="flex:1;padding:15px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">{{ addLabel }}</button>
-<button onClick="{{ toggleSaveP }}" title="{{ pSavedLabel }}" style="padding:14px 18px;border:1px solid rgba(0,59,70,.22);border-radius:999px;font-size:16px;color:{{ pSavedColor }};background:#fff" style-hover="border-color:#A67C52">{{ pSaved }}</button>
+<button class="hov-fill-navy" onClick="{{ addToCart }}" style="flex:1;padding:15px 26px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">{{ addLabel }}</button>
+<button class="hov-border-gold" onClick="{{ toggleSaveP }}" title="{{ pSavedLabel }}" style="padding:14px 18px;border:1px solid rgba(0,59,70,.22);border-radius:999px;font-size:16px;color:{{ pSavedColor }};background:#fff" style-hover="border-color:#A67C52">{{ pSaved }}</button>
 </div>
 <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
-<button onClick="{{ toggleSave }}" style="padding:12px 22px;border:1px solid rgba(0,59,70,.25);border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase" style-hover="border-color:#A67C52;color:#A67C52">{{ saveLabel }}</button>
+<button class="hov-border-gold-text-gold" onClick="{{ toggleSave }}" style="padding:12px 22px;border:1px solid rgba(0,59,70,.25);border-radius:999px;font-size:12px;letter-spacing:.12em;text-transform:uppercase" style-hover="border-color:#A67C52;color:#A67C52">{{ saveLabel }}</button>
 <sc-if value="{{ justAdded }}">
 <a href="#" onClick="{{ goCart }}" style="font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#A67C52">{{ addedNote }}</a>
 </sc-if>
@@ -660,7 +665,7 @@ img{max-width:100%}
 <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:600;margin:0 0 20px">Goes well with</h3>
 <div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px">
 <sc-for list="{{ related }}" as="item" hint-placeholder-count="4">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:1"><image-slot id="{{ item.relSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:13px 14px 16px">
 <div style="font-size:13.5px;line-height:1.35">{{ item.name }}</div>
@@ -708,7 +713,7 @@ img{max-width:100%}
 <div style="display:flex;font-size:14px;color:rgba(0,59,70,.75);margin-top:16px">Subtotal<span style="margin-left:auto">{{ subtotal }}</span></div>
 <div style="display:flex;font-size:14px;color:rgba(0,59,70,.75);margin-top:9px">Delivery<span style="margin-left:auto">{{ deliveryLabel }}</span></div>
 <div style="display:flex;font-size:17px;font-weight:600;margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,59,70,.14)">Total<span style="margin-left:auto">{{ total }}</span></div>
-<button onClick="{{ goCheckout }}" style="width:100%;margin-top:20px;padding:15px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">Checkout</button>
+<button class="hov-fill-navy" onClick="{{ goCheckout }}" style="width:100%;margin-top:20px;padding:15px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">Checkout</button>
 <div style="font-size:12px;line-height:1.6;color:rgba(0,59,70,.55);margin-top:14px">Delivery and pickup are both free — just tell us which you'd prefer.</div>
 </div>
 </div>
@@ -765,7 +770,7 @@ img{max-width:100%}
 <div style="display:flex;font-size:14px;color:rgba(0,59,70,.75);margin-top:16px">Subtotal<span style="margin-left:auto">{{ subtotal }}</span></div>
 <div style="display:flex;font-size:14px;color:rgba(0,59,70,.75);margin-top:9px">Delivery<span style="margin-left:auto">{{ deliveryLabel }}</span></div>
 <div style="display:flex;font-size:17px;font-weight:600;margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,59,70,.14)">Total<span style="margin-left:auto">{{ total }}</span></div>
-<button onClick="{{ placeOrder }}" style="width:100%;margin-top:20px;padding:15px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">Place order</button>
+<button class="hov-fill-navy" onClick="{{ placeOrder }}" style="width:100%;margin-top:20px;padding:15px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#003B46">Place order</button>
 <div style="display:{{ checkoutErrShow }};margin-top:12px;font-size:12.5px;line-height:1.6;color:#A67C52">{{ checkoutErrMsg }}</div>
 </div>
 </div>
@@ -818,7 +823,7 @@ img{max-width:100%}
 <input value="{{ svcDay }}" onChange="{{ setSvcDay }}" placeholder="Preferred day" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 <input value="{{ svcPhone }}" onChange="{{ setSvcPhone }}" placeholder="Phone" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 </div>
-<button onClick="{{ submitService }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ services.bookingCta }}</button>
+<button class="hov-cream-navy" onClick="{{ submitService }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ services.bookingCta }}</button>
 </div>
 </div>
 </section>
@@ -833,7 +838,7 @@ img{max-width:100%}
 </sc-if>
 <div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px">
 <sc-for list="{{ searchResults }}" as="item" hint-placeholder-count="4">
-<a href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:12px 13px 15px">
 <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#66A5AD">{{ item.deptLabel }}</div>
@@ -871,7 +876,7 @@ img{max-width:100%}
 <input value="{{ auName }}" onChange="{{ setAuName }}" placeholder="Your name" style="display:{{ nameShow }};padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 <input value="{{ auEmail }}" onChange="{{ setAuEmail }}" placeholder="Email" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
 <input type="password" value="{{ auPass }}" onChange="{{ setAuPass }}" placeholder="Password" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px">
-<button onClick="{{ submitAuth }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ authCta }}</button>
+<button class="hov-cream-navy" onClick="{{ submitAuth }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">{{ authCta }}</button>
 <div style="font-size:12.5px;line-height:1.6;color:#C79A6B;min-height:18px">{{ auErr }}</div>
 </div>
 </div>
@@ -945,7 +950,7 @@ img{max-width:100%}
 </sc-if>
 <div class="ris-g45" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px">
 <sc-for list="{{ savedList }}" as="item" hint-placeholder-count="0">
-<a href="#" onClick="{{ item.open }}" style="display:block;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
+<a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;border:1px solid rgba(0,59,70,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#A67C52">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.shopSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:11px 12px 14px"><div style="font-size:13px">{{ item.name }}</div><div style="font-size:13px;font-weight:600;margin-top:5px">{{ item.priceLabel }}</div></div>
 </a>
@@ -1003,7 +1008,7 @@ img{max-width:100%}
 </div>
 <div style="font-size:15px;letter-spacing:.16em;color:#A67C52;margin-top:8px">{{ r.stars }}</div>
 <p style="font-size:14.5px;line-height:1.75;color:rgba(0,59,70,.78);margin:12px 0 0;text-wrap:pretty">{{ r.text }}</p>
-<button onClick="{{ r.remove }}" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,59,70,.45);margin-top:14px" style-hover="color:#A67C52">Delete</button>
+<button class="hov-gold" onClick="{{ r.remove }}" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,59,70,.45);margin-top:14px" style-hover="color:#A67C52">Delete</button>
 </div>
 </sc-for>
 </div>
@@ -1023,7 +1028,7 @@ img{max-width:100%}
 <span style="margin-left:auto;font-size:12px;color:rgba(245,242,233,.6)">{{ revRatingLabel }}</span>
 </div>
 <textarea rows="5" value="{{ revText }}" onChange="{{ setRevText }}" placeholder="How was it?" style="width:100%;box-sizing:border-box;padding:13px 15px;border:1px solid {{ revBorder }};border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px;resize:vertical"></textarea>
-<button onClick="{{ submitReview }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">Post review</button>
+<button class="hov-cream-navy" onClick="{{ submitReview }}" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">Post review</button>
 <div style="display:{{ revErrShow }};font-size:12.5px;line-height:1.6;color:#C79A6B">Add your name, a rating and a few words.</div>
 <div style="display:{{ revSentShow }};font-size:12.5px;line-height:1.6;color:rgba(245,242,233,.8)">Thanks — your review is up.</div>
 </div>
@@ -1060,7 +1065,7 @@ img{max-width:100%}
 <sc-for list="{{ contactTopics }}" as="t" hint-placeholder-count="4"><option>{{ t.label }}</option></sc-for>
 </select>
 <textarea rows="5" placeholder="How can we help?" style="padding:13px 15px;border:1px solid rgba(245,242,233,.3);border-radius:8px;background:rgba(245,242,233,.08);color:#F5F2E9;font-size:14px;resize:vertical"></textarea>
-<button style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">Send message</button>
+<button class="hov-cream-navy" style="padding:14px;background:#A67C52;color:#F5F2E9;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase" style-hover="background:#F5F2E9;color:#003B46">Send message</button>
 <div style="font-size:12px;color:rgba(245,242,233,.55)">{{ contact.replyNote }}</div>
 </div>
 </div>
@@ -1113,27 +1118,27 @@ img{max-width:100%}
 <div>
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Shop</div>
 <div style="display:grid;gap:9px;margin-top:14px;justify-items:start">
-<a href="#" onClick="{{ goBoutique }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Boutique</a>
-<a href="#" onClick="{{ goAutomotive }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Automotive &amp; Tech</a>
-<a href="#" onClick="{{ goFireworks }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Fireworks</a>
-<a href="#" onClick="{{ goServices }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Services</a>
+<a class="hov-gold" href="#" onClick="{{ goBoutique }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Boutique</a>
+<a class="hov-gold" href="#" onClick="{{ goAutomotive }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Automotive &amp; Tech</a>
+<a class="hov-gold" href="#" onClick="{{ goFireworks }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Fireworks</a>
+<a class="hov-gold" href="#" onClick="{{ goServices }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Services</a>
 </div>
 </div>
 <div>
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Help</div>
 <div style="display:grid;gap:9px;margin-top:14px;justify-items:start">
-<a href="#" onClick="{{ goAccount }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">My account</a>
-<a href="#" onClick="{{ goContact }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Contact us</a>
-<a href="#" onClick="{{ goCart }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Your cart</a>
+<a class="hov-gold" href="#" onClick="{{ goAccount }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">My account</a>
+<a class="hov-gold" href="#" onClick="{{ goContact }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Contact us</a>
+<a class="hov-gold" href="#" onClick="{{ goCart }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Your cart</a>
 </div>
 </div>
 <div>
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#66A5AD">Company</div>
 <div style="display:grid;gap:9px;margin-top:14px;justify-items:start">
-<a href="#" onClick="{{ goAbout }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">About us</a>
-<a href="#" onClick="{{ goShowcase }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Customer reviews</a>
-<a href="#" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Privacy</a>
-<a href="#" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Terms of sale</a>
+<a class="hov-gold" href="#" onClick="{{ goAbout }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">About us</a>
+<a class="hov-gold" href="#" onClick="{{ goShowcase }}" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Customer reviews</a>
+<a class="hov-gold" href="#" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Privacy</a>
+<a class="hov-gold" href="#" style="font-size:13.5px;color:rgba(245,242,233,.8)" style-hover="color:#A67C52">Terms of sale</a>
 </div>
 </div>
 </div>
