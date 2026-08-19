@@ -49,6 +49,14 @@ img{max-width:100%}
 @keyframes ris-page-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .ris-page{animation:ris-page-in .32s ease both}
 
+/* ---- Active nav link: an underline showing which page you're on. Every
+   link reserves the same border space so turning it on/off never shifts
+   the header's height -- only the line's color changes. ---- */
+.ris-nav-links a{padding-bottom:6px;border-bottom:2px solid transparent}
+.ris-nav-links a.nav-active{color:#66A5AD;border-bottom-color:#66A5AD}
+.ris-mobile-panel a{border-left:3px solid transparent;padding-left:10px}
+.ris-mobile-panel a.nav-active{color:#66A5AD;border-left-color:#66A5AD}
+
 /* ---- Mobile nav (hamburger + dropdown) ---- */
 .ris-hamburger{display:none}
 @media (max-width:860px){
@@ -124,12 +132,12 @@ img{max-width:100%}
 <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:{{ hdrAccent }};margin-top:6px">{{ brand.tagline }}</div>
 </a>
 <nav class="ris-nav-links" style="display:flex;gap:clamp(12px,1.6vw,26px);font-size:clamp(11.5px,1vw,13px);color:#F5F2E9">
-<a class="hov-accent" href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Boutique</a>
-<a class="hov-accent" href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Automotive &amp; Tech</a>
-<a class="hov-accent" href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Fireworks</a>
-<a class="hov-accent" href="#" onClick="{{ goServices }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Services</a>
-<a class="hov-accent" href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Reviews</a>
-<a class="hov-accent" href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Contact</a>
+<a class="{{ navBoutique }}" href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Boutique</a>
+<a class="{{ navAuto }}" href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Automotive &amp; Tech</a>
+<a class="{{ navFireworks }}" href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Fireworks</a>
+<a class="{{ navServices }}" href="#" onClick="{{ goServices }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Services</a>
+<a class="{{ navReviews }}" href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Reviews</a>
+<a class="{{ navContact }}" href="#" onClick="{{ goContact }}" style="color:#F5F2E9" style-hover="color:{{ hdrAccent }}">Contact</a>
 </nav>
 <div style="margin-left:auto;display:flex;align-items:center;gap:14px">
 <div class="ris-hdr-search" style="display:flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid rgba(245,242,233,.28);border-radius:999px;min-width:clamp(120px,16vw,220px)">
@@ -152,12 +160,12 @@ img{max-width:100%}
 <input value="{{ searchQuery }}" onChange="{{ setSearchQuery }}" onKeyDown="{{ searchKeyDown }}" placeholder="Search products" style="border:0;background:transparent;outline:none;font-size:13px;color:#F5F2E9;width:100%">
 <a href="#" onClick="{{ runSearch }}" style="margin-left:auto;font-size:13px;color:#F5F2E9;flex:none">⌕</a>
 </div>
-<a href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9">Boutique</a>
-<a href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9">Automotive &amp; Tech</a>
-<a href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9">Fireworks</a>
-<a href="#" onClick="{{ goServices }}" style="color:#F5F2E9">Services</a>
-<a href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9">Reviews</a>
-<a href="#" onClick="{{ goContact }}" style="color:#F5F2E9">Contact</a>
+<a class="{{ navBoutique }}" href="#" onClick="{{ goBoutique }}" style="color:#F5F2E9">Boutique</a>
+<a class="{{ navAuto }}" href="#" onClick="{{ goAutomotive }}" style="color:#F5F2E9">Automotive &amp; Tech</a>
+<a class="{{ navFireworks }}" href="#" onClick="{{ goFireworks }}" style="color:#F5F2E9">Fireworks</a>
+<a class="{{ navServices }}" href="#" onClick="{{ goServices }}" style="color:#F5F2E9">Services</a>
+<a class="{{ navReviews }}" href="#" onClick="{{ goShowcase }}" style="color:#F5F2E9">Reviews</a>
+<a class="{{ navContact }}" href="#" onClick="{{ goContact }}" style="color:#F5F2E9">Contact</a>
 <a href="#" onClick="{{ goAccount }}" style="color:#F5F2E9">Account</a>
 <a href="#" onClick="{{ goSaved }}" style="color:#F5F2E9">Saved · {{ savedCount }}</a>
 <a href="#" onClick="{{ goContact }}" style="color:#F5F2E9">{{ topBar.linkA }}</a>
@@ -1460,6 +1468,13 @@ class Component extends DCLogic {
       isCart: s.page === "cart", isCheckout: s.page === "checkout", isServices: s.page === "services",
       isShowcase: s.page === "showcase", isContact: s.page === "contact", isAbout: s.page === "about",
       isAccount: s.page === "account",
+
+      navBoutique: "hov-accent" + (s.page === "dept" && s.deptKey === "boutique" ? " nav-active" : ""),
+      navAuto: "hov-accent" + (s.page === "dept" && s.deptKey === "automotive" ? " nav-active" : ""),
+      navFireworks: "hov-accent" + (s.page === "dept" && s.deptKey !== "boutique" && s.deptKey !== "automotive" ? " nav-active" : ""),
+      navServices: "hov-accent" + (s.page === "services" ? " nav-active" : ""),
+      navReviews: "hov-accent" + (s.page === "showcase" ? " nav-active" : ""),
+      navContact: "hov-accent" + (s.page === "contact" ? " nav-active" : ""),
       goAccount: this.go("account"),
       goSaved: (e) => { if (e) e.preventDefault(); this.setState({ page: "account", acctTab: "Saved items", placed: false }); window.scrollTo(0, 0); },
       account: c.account || {},
