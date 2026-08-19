@@ -53,9 +53,7 @@ img{max-width:100%}
    link reserves the same border space so turning it on/off never shifts
    the header's height -- only the line's color changes. ---- */
 .ris-nav-links a{padding-bottom:6px;border-bottom:2px solid transparent}
-.ris-nav-links a.nav-active{color:#66A5AD;border-bottom-color:#66A5AD}
-.ris-mobile-panel a{border-left:3px solid transparent;padding-left:10px}
-.ris-mobile-panel a.nav-active{color:#66A5AD;border-left-color:#66A5AD}
+.ris-nav-links a.nav-active{color:#66A5AD!important;border-bottom-color:#66A5AD!important}
 
 /* ---- Mobile nav (hamburger + dropdown) ---- */
 .ris-hamburger{display:none}
@@ -64,7 +62,7 @@ img{max-width:100%}
   .ris-hamburger{display:flex!important}
 }
 .ris-mobile-panel a{display:block;padding:13px 0 13px 12px;border-bottom:1px solid rgba(245,242,233,.14);border-left:3px solid transparent;font-size:14px}
-.ris-mobile-panel a.nav-active{color:#66A5AD;border-left-color:#66A5AD}
+.ris-mobile-panel a.nav-active{color:#66A5AD!important;border-left-color:#66A5AD!important}
 
 /* ---- Fixed grids collapse on narrower screens (product/category/promo grids, two-up panels) ----
    Real classes, not [style*="..."] attribute matching: the page's template
