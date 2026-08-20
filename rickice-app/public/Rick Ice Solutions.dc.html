@@ -1114,6 +1114,14 @@ img{max-width:100%}
 <sc-for list="{{ ctTopicsList }}" as="t" hint-placeholder-count="4"><button type="button" onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
 </div>
 </div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<span style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(15,50,48,.55)">Payment</span>
+<div style="display:flex;border:1px solid rgba(15,50,48,.24);border-radius:999px;overflow:hidden;width:max-content;max-width:100%">
+<button type="button" onClick="{{ setCtPayCash }}" style="{{ ctPayCashStyle }}">Cash on delivery</button>
+<button type="button" onClick="{{ setCtPayBank }}" style="{{ ctPayBankStyle }}">Mobile banking</button>
+</div>
+<p style="margin:0;font-family:'Newsreader',Georgia,serif;font-style:italic;font-size:13.5px;color:rgba(15,50,48,.65)">{{ ctPayHint }} <a href="#pay" onClick="{{ setCtTabPay }}" style="font-style:normal;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#b5875a;cursor:pointer;white-space:nowrap">See payment details →</a></p>
+</div>
 <label style="display:flex;flex-direction:column;gap:7px"><span style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(15,50,48,.55)">Message</span><textarea rows="5" placeholder="How can we help?" value="{{ ctMsgVal }}" onChange="{{ setCtMsg }}" style="padding:13px 14px;border:1px solid rgba(15,50,48,.22);border-radius:6px;background:#fdfbf6;font-size:15px;color:#123634;outline:none;resize:vertical"></textarea></label>
 <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
 <button type="button" class="hov-fill-topbg" onClick="{{ ctSendMessage }}" style="border:none;cursor:pointer;background:#b5875a;color:#fdfbf6;padding:16px 34px;border-radius:999px;font-size:11px;letter-spacing:.2em;text-transform:uppercase">{{ ctSendLabel }}</button>
