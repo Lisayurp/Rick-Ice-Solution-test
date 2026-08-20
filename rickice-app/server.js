@@ -117,6 +117,19 @@ app.put('/api/auth/me', needUser, async (req, res) => {
   res.json({ user: await me(req) });
 });
 
+/* ---------- contact ---------- */
+app.post('/api/contact', async (req, res) => {
+  const { name, contact, topic, message } = req.body || {};
+  if (!String(name || '').trim() || !String(contact || '').trim() || !String(message || '').trim()) {
+    return res.status(400).json({ error: 'Add your name, a way to reach you, and a message' });
+  }
+  const { rows } = await sql`SELECT json FROM content WHERE section = 'contact'`;
+  const shopEmail = (rows[0] && rows[0].json && rows[0].json.email) || process.env.MAIL_FROM || '';
+  await mail.send(shopEmail, `New message from ${name} (${topic || 'general'})`,
+    `From: ${name}\nReach them at: ${contact}\nTopic: ${topic || '—'}\n\n${message}`);
+  res.json({ ok: true });
+});
+
 /* ---------- orders ---------- */
 app.post('/api/orders', async (req, res) => {
   const { name, email, phone, address, mode, pay, items } = req.body || {};
@@ -167,6 +180,19 @@ app.post('/api/orders', async (req, res) => {
 
   const { rows: orderRows } = await sql`SELECT * FROM orders WHERE id = ${orderId}`;
   res.json({ order: orderRows[0], ref });
+});
+
+/* Public order lookup by ref, for the "track my order" page -- anyone with
+   the ref can check status, so this deliberately returns only what's
+   needed to show a status timeline, never the customer's name/phone/email/
+   address, since ref numbers are guessable. */
+app.get('/api/orders/track/:ref', async (req, res) => {
+  const ref = String(req.params.ref || '').trim().toUpperCase();
+  if (!ref) return res.status(400).json({ error: 'Enter an order number' });
+  const { rows } = await sql`SELECT ref, status, mode, pay, total, created_at FROM orders WHERE ref = ${ref}`;
+  const order = rows[0];
+  if (!order) return res.status(404).json({ error: "We couldn't find that number" });
+  res.json({ order });
 });
 
 app.get('/api/orders/mine', needUser, async (req, res) => {
