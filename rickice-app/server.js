@@ -125,9 +125,19 @@ app.post('/api/contact', async (req, res) => {
   }
   const { rows } = await sql`SELECT json FROM content WHERE section = 'contact'`;
   const shopEmail = (rows[0] && rows[0].json && rows[0].json.email) || process.env.MAIL_FROM || '';
+  const contactTrimmed = String(contact).trim();
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactTrimmed);
+
   await mail.send(shopEmail, `New message from ${name} (${topic || 'general'})`,
-    `From: ${name}\nReach them at: ${contact}\nTopic: ${topic || '—'}\n\n${message}`);
-  res.json({ ok: true });
+    `From: ${name}\nReach them at: ${contact}\nTopic: ${topic || '—'}\n\n${message}`,
+    { replyTo: isEmail ? contactTrimmed : undefined });
+
+  if (isEmail) {
+    await mail.send(contactTrimmed, 'We got your message — Rick Ice Solutions',
+      `Hi ${name},\n\nThanks for reaching out — we got your message and will reply within one business day.\n\nWhat you sent us:\n${message}\n\n— Rick Ice Solutions`);
+  }
+
+  res.json({ ok: true, confirmedByEmail: isEmail });
 });
 
 /* ---------- orders ---------- */

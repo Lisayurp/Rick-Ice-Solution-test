@@ -13,20 +13,23 @@ const transport = host
   : null;
 
 /* Sends an email, or logs it when SMTP isn't configured yet.
-   Never throws — a mail problem must not lose an order. */
-async function send(to, subject, body) {
+   Never throws — a mail problem must not lose an order.
+   opts.replyTo lets a notification-to-self email still let the reader
+   hit "Reply" and land on a real customer, instead of themselves. */
+async function send(to, subject, body, opts) {
   if (!to) return;
+  const replyTo = opts && opts.replyTo;
   const { rows } = await sql`INSERT INTO mail_log (to_addr, subject, body) VALUES (${to}, ${subject}, ${body}) RETURNING id`;
   const logId = rows[0].id;
   if (!transport) {
     console.log('\n--- EMAIL (not sent, no SMTP configured) ---');
-    console.log('To:', to, '\nSubject:', subject, '\n' + body + '\n');
+    console.log('To:', to, replyTo ? '\nReply-To: ' + replyTo : '', '\nSubject:', subject, '\n' + body + '\n');
     return;
   }
   try {
     await transport.sendMail({
       from: process.env.MAIL_FROM || 'Rick Ice Solutions <no-reply@rickice.com>',
-      to, subject,
+      to, subject, replyTo,
       text: body,
       html: '<pre style="font:14px/1.6 system-ui">' + body.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])) + '</pre>'
     });
