@@ -780,15 +780,11 @@ img{max-width:100%}
 <div style="background:#fff;border:1px solid rgba(15,50,48,.12);border-radius:12px;padding:26px">
 <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#b5875a">Payment</div>
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
-<sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="3">
+<sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="2">
 <button onClick="{{ m.pick }}" style="padding:10px 20px;border-radius:999px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:{{ m.bg }};color:{{ m.fg }};border:1px solid rgba(15,50,48,.25)">{{ m.label }}</button>
 </sc-for>
 </div>
-<input placeholder="Card number" style="width:100%;margin-top:16px;padding:13px 15px;border:1px solid rgba(15,50,48,.2);border-radius:8px;background:#f5f1e8;font-size:14px;box-sizing:border-box">
-<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
-<input placeholder="MM / YY" style="padding:13px 15px;border:1px solid rgba(15,50,48,.2);border-radius:8px;background:#f5f1e8;font-size:14px">
-<input placeholder="CVC" style="padding:13px 15px;border:1px solid rgba(15,50,48,.2);border-radius:8px;background:#f5f1e8;font-size:14px">
-</div>
+<p style="font-size:13px;line-height:1.6;color:rgba(15,50,48,.65);margin:16px 0 0">{{ payHintCheckout }}</p>
 </div>
 </div>
 <div style="border:1px solid rgba(15,50,48,.14);border-radius:12px;padding:24px;background:#fff">
@@ -1343,7 +1339,7 @@ img{max-width:100%}
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000}}">
 class Component extends DCLogic {
   state = { page: "home", deptKey: "boutique", cat: "", pid: "", qty: 1, fitting: false,
-            cart: [], mode: "Deliver", pay: "Card", placed: false, mobileNavOpen: false,
+            cart: [], mode: "Deliver", pay: "Cash", placed: false, mobileNavOpen: false,
             cartPending: null, cartPrompt: false, searchQuery: "",
             svcType: "", svcItem: "", svcIssue: "", svcDay: "", svcPhone: "", svcErr: false, svcSent: false,
             trackRef: "", tracked: false, acctTab: "Details",
@@ -2035,9 +2031,12 @@ class Component extends DCLogic {
       pickupBg: chipBg(on(s.mode, "Pick up in store")), pickupFg: chipFg(on(s.mode, "Pick up in store")),
       pickDeliver: () => this.setState({ mode: "Deliver" }),
       pickPickup: () => this.setState({ mode: "Pick up in store" }),
-      payMethods: ["Card", "Bank transfer", "Pay in store"].map(m => ({
+      payMethods: ["Cash", "Mobile banking"].map(m => ({
         label: m, bg: chipBg(on(s.pay, m)), fg: chipFg(on(s.pay, m)), pick: () => this.setState({ pay: m })
       })),
+      payHintCheckout: s.pay === "Mobile banking"
+        ? "We'll send the account details and confirm once we see your transfer."
+        : "Pay the driver on delivery, or in store if you're collecting.",
 
       svcType: s.svcType || ((c.services || {}).serviceOptions || [""])[0],
       svcItem: s.svcItem, svcIssue: s.svcIssue, svcDay: s.svcDay, svcPhone: s.svcPhone,
