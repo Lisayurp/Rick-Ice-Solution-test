@@ -379,8 +379,9 @@ app.put('/api/admin/categories/:id', needStaff, async (req, res) => {
   if (!existing) return res.status(404).json({ error: 'No such category' });
   const { dept, name, photo, sale } = req.body || {};
   if (!dept || !name) return res.status(400).json({ error: 'Department and name are required' });
+  const nextSale = sale === undefined ? existing.sale : (sale ? 1 : 0);
   try {
-    await sql`UPDATE categories SET dept = ${dept}, name = ${name}, photo = ${photo || existing.photo}, sale = ${sale ? 1 : 0} WHERE id = ${req.params.id}`;
+    await sql`UPDATE categories SET dept = ${dept}, name = ${name}, photo = ${photo || existing.photo}, sale = ${nextSale} WHERE id = ${req.params.id}`;
   } catch (e) {
     return res.status(400).json({ error: 'A category with that department and name already exists' });
   }
