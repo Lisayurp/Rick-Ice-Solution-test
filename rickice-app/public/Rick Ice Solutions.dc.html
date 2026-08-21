@@ -451,14 +451,14 @@ img{max-width:100%}
 <sc-if value="{{ isAutoDept }}">
 <section class="ris-page" style="position:relative;background:#2B5157;overflow:hidden;min-height:400px">
 <div style="position:absolute;inset:0"><image-slot id="{{ dept.heroSlot }}" style="color:#f5f1e8" shape="rect" src="{{ dept.heroPhoto }}" placeholder="Drop the garage photo here"></image-slot></div>
-<div style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(43,81,87,.9) 42%,rgba(43,81,87,.45));pointer-events:none"></div>
+<div style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(43,81,87,.32) 0%,rgba(43,81,87,.14) 30%,rgba(43,81,87,0) 55%);pointer-events:none"></div>
 <div style="width:min(1440px,94vw);margin:0 auto;position:relative;padding:74px 0;pointer-events:none">
-<div style="display:flex;align-items:center;gap:12px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#b5875a">
+<div style="text-shadow:0 1px 3px rgba(0,20,24,.55),0 4px 22px rgba(0,20,24,.5);display:flex;align-items:center;gap:12px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#b5875a">
 <span style="width:26px;height:2px;background:#b5875a"></span>{{ dept.label }}
 </div>
-<h1 style="font-family:Oswald,Helvetica,sans-serif;font-size:clamp(42px,5.6vw,76px);font-weight:600;line-height:.98;letter-spacing:.01em;text-transform:uppercase;color:#f5f1e8;margin:18px 0 0;max-width:16ch">{{ dept.title }}</h1>
-<p style="font-size:15px;line-height:1.7;color:rgba(245,241,232,.78);margin:20px 0 0;max-width:44ch;text-wrap:pretty">{{ dept.blurb }}</p>
-<div style="display:flex;gap:26px;margin-top:34px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,241,232,.55)">
+<h1 style="text-shadow:0 1px 3px rgba(0,20,24,.55),0 4px 22px rgba(0,20,24,.5);font-family:Oswald,Helvetica,sans-serif;font-size:clamp(42px,5.6vw,76px);font-weight:600;line-height:.98;letter-spacing:.01em;text-transform:uppercase;color:#f5f1e8;margin:18px 0 0;max-width:16ch">{{ dept.title }}</h1>
+<p style="text-shadow:0 1px 3px rgba(0,20,24,.55),0 4px 22px rgba(0,20,24,.5);font-size:15px;line-height:1.7;color:rgba(245,241,232,.92);margin:20px 0 0;max-width:44ch;text-wrap:pretty">{{ dept.blurb }}</p>
+<div style="text-shadow:0 1px 3px rgba(0,20,24,.55),0 4px 22px rgba(0,20,24,.5);display:flex;gap:26px;margin-top:34px;font-family:Oswald,Helvetica,sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,241,232,.75)">
 <span>{{ dept.count }} parts in stock</span><span>Fitted in-house</span><span>Island delivery</span>
 </div>
 </div>
