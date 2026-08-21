@@ -98,6 +98,13 @@ img{max-width:100%}
   .ris-g2col{grid-template-columns:1fr!important;gap:20px!important}
 }
 
+/* ---- Boutique promo photo: the source photo is a tall portrait crammed
+   into a short, wide card, so a centered crop was cutting the top and
+   bottom evenly -- losing the person's face off the top. image-slot
+   exposes its inner <img> as part="image", so it's targetable from
+   outside without touching the component itself. ---- */
+#ris-bq-promo::part(image){object-position:top}
+
 /* ---- Homepage hero: stack the two photos instead of a diagonal split on
    narrow screens, but keep each headline overlaid ON its own photo (like
    desktop) instead of pushed below both photos. ---- */
