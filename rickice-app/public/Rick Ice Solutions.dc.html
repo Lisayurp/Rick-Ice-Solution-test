@@ -250,17 +250,16 @@ img{max-width:100%}
 </section>
 
 <section style="width:min(1440px,94vw);margin:0 auto;padding:52px 0 0">
-<div style="display:flex;align-items:flex-end;gap:24px;margin-bottom:26px">
-<div>
 <h2 style="font-family:'Newsreader',Georgia,serif;font-size:clamp(24px,2.6vw,34px);font-weight:400;margin:0">{{ home.twoSidesTitle }}</h2>
 <p style="font-size:14px;color:rgba(15,50,48,.65);margin:8px 0 0">{{ home.twoSidesBlurb }}</p>
+
+<div style="border-top:3px solid #6B7A5A;margin-top:34px;padding-top:22px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:16px">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6B7A5A">{{ home.bqPicksLabel }}</div>
+<a class="hov-gold" href="#" onClick="{{ goBoutique }}" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(15,50,48,.5)" style-hover="color:#b5875a">View all &rarr;</a>
 </div>
-</div>
-<div class="ris-g2col" style="display:grid;grid-template-columns:1fr 1fr;gap:38px">
-<div>
-<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b5875a;margin-bottom:14px">{{ home.bqPicksLabel }}</div>
-<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-<sc-for list="{{ bqPicks }}" as="item" hint-placeholder-count="3">
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px">
+<sc-for list="{{ bqPicks }}" as="item" hint-placeholder-count="5">
 <a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(15,50,48,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#b5875a">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:12px 13px 15px">
@@ -271,10 +270,14 @@ img{max-width:100%}
 </sc-for>
 </div>
 </div>
-<div>
-<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b5875a;margin-bottom:14px">{{ home.autoPicksLabel }}</div>
-<div class="ris-g3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-<sc-for list="{{ autoPicks }}" as="item" hint-placeholder-count="3">
+
+<div style="border-top:3px solid #b5875a;margin-top:34px;padding-top:22px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:16px">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b5875a">{{ home.autoPicksLabel }}</div>
+<a class="hov-gold" href="#" onClick="{{ goAutomotive }}" style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(15,50,48,.5)" style-hover="color:#b5875a">View all &rarr;</a>
+</div>
+<div class="ris-g45" style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px">
+<sc-for list="{{ autoPicks }}" as="item" hint-placeholder-count="5">
 <a class="hov-border-gold" href="#" onClick="{{ item.open }}" style="display:block;background:#fff;border:1px solid rgba(15,50,48,.12);border-radius:10px;overflow:hidden" style-hover="border-color:#b5875a">
 <div style="position:relative;aspect-ratio:4/5"><image-slot id="{{ item.homeSlot }}" shape="rect" src="{{ item.photo }}" placeholder="Photo"></image-slot></div>
 <div style="padding:12px 13px 15px">
@@ -283,7 +286,6 @@ img{max-width:100%}
 </div>
 </a>
 </sc-for>
-</div>
 </div>
 </div>
 </section>
@@ -1896,8 +1898,8 @@ class Component extends DCLogic {
       tintServices: (c.services || {}).photo ? "transparent" : "rgba(245,241,232,.28)",
       tintAbout: (c.about || {}).photo ? "transparent" : "rgba(245,241,232,.28)",
 
-      bqPicks: all.filter(x => x.deptKey === "boutique").slice(0, 3),
-      autoPicks: all.filter(x => x.deptKey === "automotive").slice(0, 3),
+      bqPicks: all.filter(x => x.deptKey === "boutique").slice(0, 5),
+      autoPicks: all.filter(x => x.deptKey === "automotive").slice(0, 5),
       hdrBg: "#0f3230", hdrTopBg: "#b5875a", hdrAccent: "#b5875a",
       boutiquePerks: [
         { title: "Island delivery", note: "Always free" },
