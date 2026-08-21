@@ -55,7 +55,7 @@ async function needUser(req, res, next) {
 
 /* ---------- catalogue + content ---------- */
 async function catalogue() {
-  const { rows } = await sql`SELECT * FROM products WHERE active = 1 ORDER BY dept, id`;
+  const { rows } = await sql`SELECT * FROM products WHERE active = 1 ORDER BY dept, sort, id`;
   const { rows: cats } = await sql`SELECT * FROM categories ORDER BY dept, sort, id`;
   const { rows: contentRows } = await sql`SELECT * FROM content`;
   const content = {};
@@ -270,7 +270,7 @@ app.get('/api/admin/summary', needStaff, async (req, res) => {
   }
   const { rows: bookings } = await sql`SELECT * FROM bookings ORDER BY id DESC LIMIT 100`;
   const { rows: reviews } = await sql`SELECT * FROM reviews ORDER BY id DESC LIMIT 100`;
-  const { rows: products } = await sql`SELECT * FROM products ORDER BY dept, id`;
+  const { rows: products } = await sql`SELECT * FROM products ORDER BY dept, sort, id`;
   const { rows: categories } = await sql`SELECT * FROM categories ORDER BY dept, sort, id`;
   const { rows: users } = await sql`SELECT id, name, email, phone, role, created_at FROM users ORDER BY id DESC`;
   const { rows: contentRows } = await sql`SELECT * FROM content`;
@@ -334,6 +334,20 @@ app.post('/api/admin/products', needStaff, async (req, res) => {
 
 app.delete('/api/admin/products/:slot', needStaff, async (req, res) => {
   await sql`UPDATE products SET active = 0 WHERE slot_id = ${req.params.slot}`;
+  res.json({ ok: true });
+});
+
+app.put('/api/admin/products/reorder', needStaff, async (req, res) => {
+  const { dept, slotIds } = req.body || {};
+  if (!dept || !Array.isArray(slotIds) || !slotIds.length) return res.status(400).json({ error: 'Department and slotIds are required' });
+  const { rows } = await sql`SELECT slot_id FROM products WHERE dept = ${dept} AND active = 1`;
+  const valid = new Set(rows.map(r => r.slot_id));
+  if (slotIds.length !== rows.length || !slotIds.every(id => valid.has(id))) {
+    return res.status(400).json({ error: 'slotIds must match this department\'s active products exactly' });
+  }
+  await withTransaction(async (tsql) => {
+    for (let i = 0; i < slotIds.length; i++) await tsql`UPDATE products SET sort = ${i} WHERE slot_id = ${slotIds[i]}`;
+  });
   res.json({ ok: true });
 });
 

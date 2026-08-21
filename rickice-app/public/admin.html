@@ -113,7 +113,15 @@
       <button class="go" onclick="saveProduct()">Save product</button>
       <span class="err" id="pErr"></span>
     </div>
-    <table><thead><tr><th></th><th>ID</th><th>Name</th><th>Dept</th><th>Category</th><th>Price</th><th>Stock</th><th>Barcode</th><th></th></tr></thead>
+    <div class="row" style="grid-template-columns:220px">
+      <div><label>Filter by department</label><select id="prodDeptFilter" onchange="drawProducts()">
+        <option value="">All departments</option>
+        <option value="boutique">Boutique</option>
+        <option value="automotive">Automotive</option>
+        <option value="fireworks">Fireworks</option>
+      </select></div>
+    </div>
+    <table><thead><tr><th></th><th></th><th>ID</th><th>Name</th><th>Dept</th><th>Category</th><th>Price</th><th>Stock</th><th>Barcode</th><th></th></tr></thead>
     <tbody id="prodBody"></tbody></table>
   </section>
 
@@ -256,14 +264,32 @@ async function setOrder(id, status) {
 
 function drawProducts() {
   refreshCatList($('pDept') ? $('pDept').value : 'boutique');
-  $('prodBody').innerHTML = DATA.products.filter(p => p.active).map(p => `<tr>
+  const filterDept = $('prodDeptFilter') ? $('prodDeptFilter').value : '';
+  const list = DATA.products.filter(p => p.active && (!filterDept || p.dept === filterDept));
+  $('prodBody').innerHTML = list.map((p, i) => {
+    const prevSameDept = i > 0 && list[i - 1].dept === p.dept;
+    const nextSameDept = i < list.length - 1 && list[i + 1].dept === p.dept;
+    return `<tr>
+    <td>
+        <button class="mini" title="Move up" ${prevSameDept ? '' : 'disabled'} onclick="moveProduct('${esc(p.slot_id)}', '${esc(p.dept)}', -1)">&uarr;</button>
+        <button class="mini" title="Move down" ${nextSameDept ? '' : 'disabled'} onclick="moveProduct('${esc(p.slot_id)}', '${esc(p.dept)}', 1)">&darr;</button>
+    </td>
     <td>${p.photo ? `<img class="thumb" src="${esc(p.photo)}">` : ''}</td>
     <td>${esc(p.slot_id)}</td><td>${esc(p.name)}</td><td>${esc(p.dept)}</td><td>${esc(p.category)}</td>
     <td>${money(p.price)}</td>
     <td><input type="number" value="${p.stock}" style="width:80px" onchange="setStock('${esc(p.slot_id)}', this.value)"></td>
     <td>${p.barcode ? `<div style="font-size:11px">${esc(p.barcode)}</div><button class="mini" onclick="printBarcode('${esc(p.slot_id)}')">Print label</button>` : '<span class="muted">—</span>'}</td>
     <td><button class="mini" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
-        <button class="mini" onclick="delProduct('${esc(p.slot_id)}')">Remove</button></td></tr>`).join('');
+        <button class="mini" onclick="delProduct('${esc(p.slot_id)}')">Remove</button></td></tr>`;
+  }).join('');
+}
+async function moveProduct(slotId, dept, dir) {
+  const slotIds = DATA.products.filter(p => p.active && p.dept === dept).map(p => p.slot_id);
+  const i = slotIds.indexOf(slotId), j = i + dir;
+  if (j < 0 || j >= slotIds.length) return;
+  [slotIds[i], slotIds[j]] = [slotIds[j], slotIds[i]];
+  try { await api('/api/admin/products/reorder', { method:'PUT', body: JSON.stringify({ dept, slotIds }) }); refresh(); }
+  catch (e) { $('pErr').textContent = e.message; }
 }
 function toggleVendorBarcodeField(dept) {
   $('pVendorBarcodeField').style.display = dept === 'fireworks' ? 'none' : '';

@@ -78,7 +78,8 @@ CREATE TABLE IF NOT EXISTS products (
   stock                 INTEGER NOT NULL DEFAULT 0,
   active                INTEGER NOT NULL DEFAULT 1,
   barcode               TEXT DEFAULT '',
-  vendor_barcode_photo  TEXT DEFAULT ''
+  vendor_barcode_photo  TEXT DEFAULT '',
+  sort                  INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -155,11 +156,15 @@ CREATE TABLE IF NOT EXISTS counters (
 `;
 
 /* Runs the schema (and the starting order-ref counter) once per cold start.
-   CREATE TABLE IF NOT EXISTS / ON CONFLICT DO NOTHING make this safe to repeat. */
+   CREATE TABLE IF NOT EXISTS / ON CONFLICT DO NOTHING make this safe to repeat.
+   ALTER TABLE ADD COLUMN IF NOT EXISTS covers columns added after a table
+   already existed in production, since CREATE TABLE IF NOT EXISTS alone
+   only affects tables that don't exist yet. */
 let ready = null;
 function ensureReady() {
   if (!ready) {
     ready = pool.query(SCHEMA)
+      .then(() => pool.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS sort INTEGER NOT NULL DEFAULT 0'))
       .then(() => pool.query("INSERT INTO counters (name, value) VALUES ('order_ref', 1042) ON CONFLICT (name) DO NOTHING"));
   }
   return ready;
