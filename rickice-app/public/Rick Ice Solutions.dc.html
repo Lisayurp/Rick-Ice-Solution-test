@@ -1458,7 +1458,7 @@ class Component extends DCLogic {
 
   c() { return window.RICKICE || {}; }
   cur() { return (this.c().brand || {}).currency || "EC$"; }
-  money(n) { return this.cur() + Math.round(n).toLocaleString("en-US"); }
+  money(n) { return this.cur() + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
   num(v) { return parseFloat(String(v || "0").replace(/[^0-9.]/g, "")) || 0; }
 
   go(page) { return (e) => { if (e) e.preventDefault(); this.setState({ page, placed: false, mobileNavOpen: false }); window.scrollTo(0, 0); }; }
@@ -1538,8 +1538,8 @@ class Component extends DCLogic {
         out.push(Object.assign({}, p, {
           deptKey: k, deptLabel: d.label || k,
           photo: p.photo || "",
-          priceLabel: this.cur() + p.price,
-          wasLabel: was ? this.cur() + p.was : "",
+          priceLabel: this.money(p.price),
+          wasLabel: was ? this.money(p.was) : "",
           badgeShow: p.badge ? "block" : "none",
           badgeBg: p.badge === "Sale" ? "#b5875a" : "#0f3230",
           swatches: (p.colours || []).map(hex => ({ hex })),
@@ -1647,7 +1647,7 @@ class Component extends DCLogic {
       const base = all.find(x => x.slotId === l.id) || {};
       return Object.assign({}, base, {
         qty: l.qty,
-        fittingNote: l.fitting ? "+ " + ((c.fitting || {}).label || "fitting") + " " + this.cur() + fee : "",
+        fittingNote: l.fitting ? "+ " + ((c.fitting || {}).label || "fitting") + " " + this.money(fee) : "",
         lineTotal: this.money((this.num(base.price) + (l.fitting ? fee : 0)) * l.qty),
         cartSlot: "ris-cart-" + base.slotId,
         inc: () => this.bump(l.id, 1), dec: () => this.bump(l.id, -1),
@@ -1805,7 +1805,7 @@ class Component extends DCLogic {
       acctDetails: s.acctTab === "Details", acctOrders: s.acctTab === "Orders",
       acctSaved: s.acctTab === "Saved items", acctBookings: s.acctTab === "Bookings",
       acctOrderList: (s.orders.concat((c.account || {}).orders || [])).map(o => Object.assign({}, o, {
-        totalLabel: this.cur() + o.total,
+        totalLabel: this.money(o.total),
         badgeBg: o.status === "Delivered" ? "rgba(15,50,48,.08)" : "#b5875a",
         badgeFg: o.status === "Delivered" ? "rgba(15,50,48,.7)" : "#0f3230"
       })),
@@ -1937,7 +1937,7 @@ class Component extends DCLogic {
 
       p, related: all.filter(x => x.deptKey === p.deptKey && x.slotId !== p.slotId).slice(0, 4),
       qty: s.qty, fitting: s.fitting,
-      fittingLabel: ((c.fitting || {}).label || "Add workshop fitting") + " · " + this.cur() + fee,
+      fittingLabel: ((c.fitting || {}).label || "Add workshop fitting") + " · " + this.money(fee),
       fittingNote: (c.fitting || {}).note || "",
       incQty: () => this.setState(st => ({ qty: st.qty + 1 })),
       decQty: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
